@@ -31,7 +31,4 @@ class Schedule:
             return "short schedule"
         else:
             return "long schedule"
-        
-
-
     
