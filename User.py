@@ -45,8 +45,8 @@ class User:
     def removeSchedule(self,schedule):
         self.savedSchedules.remove(schedule)
 
-    def getPrefernces(self)->Preferences:
+    def getPreferences(self)->Preferences:
         return self.preferences
     
     def setPreferences(self,preferences):
-        self.preferences = Preferences
+        self.preferences = preferences

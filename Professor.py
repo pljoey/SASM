@@ -29,7 +29,7 @@ class Professor:
     def setPrefix(self, pre):
         self.prefix = pre
   
-    def getProfessorReview(self) -> list:
+    def getProfessorReviews(self) -> list:
         return self.professorReviews
 
     #no setters for getProfessorRatings since its a list. Instead it has add and remove rating methods
