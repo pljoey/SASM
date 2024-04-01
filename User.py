@@ -5,12 +5,13 @@ import Preferences
 #methods and attributes for User class
 class User:
     #constructor for User
-    def __init__(self, userName, userID,coursesTaken = [], savedSchedules = [], preferences = Preferences.Preferences()):
-        self.userName = userName
-        self.userID = userID
-        self.coursesTaken = coursesTaken
-        self.savedSchedules = savedSchedules
-        self.preferences = preferences
+    def __init__(self, userName, password, coursesTaken = []):
+        self._userName = userName
+        self._password = password
+        self._USERID = 1 #this will get a new value from the database. it will be the highest known userID + 1
+        self._coursesTaken = coursesTaken
+        #self.savedSchedules = savedSchedules
+        self._preferences = Preferences(coursesTaken)
 
     #getters and setters for above attributes
     def getUserName(self)->str:
