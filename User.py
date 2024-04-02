@@ -28,25 +28,29 @@ class User:
     def getCoursesTaken(self)->list:
         return self.coursesTaken
     
-    #no setter for coursesTaken because its a list. Instead it has add and remove course methods
-    def addCourse(self,course):
-        self.coursesTaken.append(course)
-
-    def removeCourse(self,course):
-        self.coursesTaken.remove(course)
+    def setCoursesTaken(self,courses):
+        self.coursesTaken = courses
 
     def getSavedSchedules(self)->list:
         return self.savedSchedules
     
-    #no setter for savedSchedule because its a list. Instead it has add and remove schedule methods
-    def addSchedule(self,schedule):
-        self.savedSchedules.append(schedule)
-
-    def removeSchedule(self,schedule):
-        self.savedSchedules.remove(schedule)
+    def setSavedSchedules(self,schedules):
+        self.savedSchedules = schedules
 
     def getPreferences(self)->Preferences:
         return self.preferences
     
     def setPreferences(self,preferences):
-        self.preferences = preferences
+        self.preferences = preferences    
+        
+    # def addSchedule(self,schedule):
+    #     self.savedSchedules.append(schedule)
+
+    # def removeSchedule(self,schedule):
+    #     self.savedSchedules.remove(schedule)
+
+    # def addCourse(self,course):
+    #     self.coursesTaken.append(course)
+
+    # def removeCourse(self,course):
+    #     self.coursesTaken.remove(course)
