@@ -3,12 +3,13 @@ import Professor
 #methods and attributes for Course class
 class Course:
     #constructor
-    def __init__(self, courseID, courseName, creditHours, isElective, difficultyRating = -1.0):
+    def __init__(self, courseID, courseName, creditHours, isElective, difficultyRating = -1.0, sectionList = {}):
         self.courseID = courseID    
         self.courseName = courseName    
         self.creditHours = creditHours
         self.isElective = isElective
         self.difficultyRating = difficultyRating  
+        self.sectionList = sectionList
  
     
     #getter and setter methods for all of the attributes
@@ -42,4 +43,10 @@ class Course:
     
     def setDifficultyRating(self,diff):
         self.difficultyRating = diff
+
+    def getSectionList(self)->dict:
+        return self.sectionList
+    
+    def setSectionList(self,sections):
+        self.sectionList = sections
         
