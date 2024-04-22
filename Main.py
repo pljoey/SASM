@@ -1,7 +1,15 @@
-import User
+#import CourseController
+from Controllers import UserController
+
+user_controller = UserController()
+main_loop_string = "What would you like to do?\n1)Create Schedule\n2)Edit Schedule\n3)Edit Preferences\n4)View Course Information\n5)View Professor Information\n6)Exit"
+edit_preference_string = "What would you like to do?\n1)Edit Courses taken\n2)Edit BlackList"
 
 def sign_up():
-    new_user = 0
+    """
+    This function will create a new user and auto log the user in
+    the return value is the user
+    """ 
     username = input("What is your username: ")
     while(False): #check if username already exists
         username = input("Username already exists, try a new username: ")
@@ -9,10 +17,9 @@ def sign_up():
     if(input("Do you have any previous courses taken to list? (Y/N) " == "Y")):
         courses_taken = input("What courses have you taken? Insert in a space separated lists, IE: 'IT386 IT383 ...' ")
         courses_taken = courses_taken.split(" ")
-        new_user = User(username, password, courses_taken)
+        return user_controller.create_user(username, password, courses_taken)
     else:
-        new_user = User(username, password)
-    #add new user into the database
+        return user_controller.create_user(username, password)
 
 
 def log_in():
@@ -30,16 +37,26 @@ def start():
     elif(choice == "2"):
         log_in()
 
-def get_choice():
+def edit_preferences(user):
     while(True):
-        print("What would you like to do?\n1)Create Schedule\n2)Edit Schedule\n3)Edit Preferences\n4)View Course Information\n5)View Professor Information\n6)Exit")
-        choice = input()
+        choice = input(edit_preference_string)
+        if(choice == "1"):
+            pass
+        elif(choice == "2"):
+            pass
+        else:
+            print("Incorrect Choice")
+
+if __name__ == "__main__":
+    user = start()
+    while(True):
+        choice = input(main_loop_string)
         if(choice == "1"):
             pass
         elif(choice == "2"):
             pass
         elif(choice == "3"):
-            pass
+            edit_preferences(user)
         elif(choice == "4"):
             pass
         elif(choice == "5"):
@@ -47,8 +64,4 @@ def get_choice():
         elif(choice == "6"):
             break
         else:
-            print("Incorrect choice")
-
-if __name__ == "__main__":
-    start()
-    get_choice()
+            print("Incorrect Choice")
