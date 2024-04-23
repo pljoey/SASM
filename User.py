@@ -5,52 +5,40 @@ import Preferences
 #methods and attributes for User class
 class User:
     #constructor for User
-    def __init__(self, userName, userID,coursesTaken = [], savedSchedules = [], preferences = Preferences.Preferences()):
-        self.userName = userName
-        self.userID = userID
-        self.coursesTaken = coursesTaken
-        self.savedSchedules = savedSchedules
+    def __init__(self, user_name, user_id,courses_taken = [], saved_schedules = [], preferences = Preferences.Preferences()):
+        self.user_name = user_name
+        self.user_id = user_id
+        self.courses_taken = courses_taken
+        self.saved_schedules = saved_schedules
         self.preferences = preferences
 
     #getters and setters for above attributes
-    def getUserName(self)->str:
-        return self.userName
+    def get_user_name(self)->str:
+        return self.user_name
     
-    def setUserName(self,userName):
-        self.userName = userName
+    def set_user_name(self,user_name):
+        self.user_name = user_name
 
-    def getUserID(self)->int:
-        return self.userID
+    def get_user_id(self)->int:
+        return self.user_id
     
-    def setUserID(self,id):
-        self.userID = id
+    def set_user_id(self,id):
+        self.user_id = id
 
-    def getCoursesTaken(self)->list:
-        return self.coursesTaken
+    def get_courses_taken(self)->list:
+        return self.courses_taken
     
-    def setCoursesTaken(self,courses):
-        self.coursesTaken = courses
+    def set_courses_taken(self,courses):
+        self.courses_taken = courses
 
-    def getSavedSchedules(self)->list:
-        return self.savedSchedules
+    def get_saved_schedules(self)->list:
+        return self.saved_schedules
     
-    def setSavedSchedules(self,schedules):
-        self.savedSchedules = schedules
+    def set_saved_schedules(self,schedules):
+        self.saved_schedules = schedules
 
-    def getPreferences(self)->Preferences:
+    def get_preferences(self)->Preferences:
         return self.preferences
     
-    def setPreferences(self,preferences):
+    def set_preferences(self,preferences):
         self.preferences = preferences    
-        
-    # def addSchedule(self,schedule):
-    #     self.savedSchedules.append(schedule)
-
-    # def removeSchedule(self,schedule):
-    #     self.savedSchedules.remove(schedule)
-
-    # def addCourse(self,course):
-    #     self.coursesTaken.append(course)
-
-    # def removeCourse(self,course):
-    #     self.coursesTaken.remove(course)
