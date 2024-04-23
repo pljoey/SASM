@@ -5,35 +5,19 @@ class Schedule:
     #constructor for schedule
     def __init__ (self,semesters = [], type = ""):
         self.semesters = semesters
-        self.scheduleType = type
+        self.schedule_type = type
 
     #getters for the above attributes
-    def getSemesters(self)->list:
+    def get_semesters(self)->list:
         return self.semesters
     
-    def setSemesters(self, semester):
+    def set_semesters(self, semester):
         self.semesters = semester
 
-    def getScheduleType(self)->str:
-        return self.scheduleType
+    def get_schedule_type(self)->str:
+        return self.schedule_type
 
-    def setSchdeuleType(self, type):
-        self.scheduleType = type
+    def set_schdeule_type(self, type):
+        self.schedule_type = type
 
-    # def addSemester(self,semester):
-    #     self.semesters.append(semester)
-    #     self.scheduleType = self.determineScheduleType()
-
-    # def removeSemester(self,semester):
-    #     self.semesters.remove(semester)
-    #     self.scheduleType = self.determineScheduleType()
-
-    # #determines the scheduleType based on the number of semesters
-    # def determineScheduleType(self)->str:
-    #     if(len(self.semesters) == 0):
-    #         return "empty schedule"
-    #     elif(len(self.semesters) == 1):
-    #         return "short schedule"
-    #     else:
-    #         return "long schedule"
     

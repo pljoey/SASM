@@ -3,64 +3,33 @@ import Course
 #methods and attributes for Semester class
 class Semester:
     #constructor for Semester class
-    def __init__(self, sememsterID, courses = [], semesterDifficulty = -1.0, totalCreditHours = 0.0):
-        self.semesterID = sememsterID
+    def __init__(self, sememster_id, courses = [], semester_difficulty = -1.0, total_credit_hours = 0.0):
+        self.semester_id = sememster_id
         self.courses = courses
-        self.semesterDifficulty = semesterDifficulty
-        self.totalCreditHours = totalCreditHours
+        self.semester_difficulty = semester_difficulty
+        self.total_credit_hours = total_credit_hours
 
     #getters and setters for the above attributes
-    def getSemesterID(self)->str:
-        return self.semesterID
+    def get_semester_id(self)->str:
+        return self.semester_id
     
-    def setSemesterID(self,id):
-        self.semesterID = id
+    def set_semester_id(self,id):
+        self.semester_id = id
 
-    def getCourses(self)->list:
+    def get_courses(self)->list:
         return self.courses
     
-    def setCourses(self, courses):
+    def set_courses(self, courses):
         self.courses = courses
     
-    def getSemesterDifficulty(self)->float:
-        return self.semesterDifficulty 
+    def get_semester_difficulty(self)->float:
+        return self.semester_difficulty 
 
-    def setSemesterDifficulty(self, difficulty):
-        self.semesterDifficulty = difficulty
+    def set_semester_difficulty(self, difficulty):
+        self.semester_difficulty = difficulty
 
-    def getTotalCreditHours(self)->int:
-        return self.totalCreditHours
+    def get_total_credit_hours(self)->int:
+        return self.total_credit_hours
     
     def setTotalCreditHours(self, creditHours):
         self.totalCreditHours = creditHours
-
-    # def addCourse(self,course):
-    #     self.courses.append(course)
-    #     self.semesterDifficulty = self.calculateSemesterDifficulty()
-    #     self.totalCreditHours = self.calculateTotalCreditHours()
-
-    # def removeCourse(self,course):
-    #     self.courses.remove(course)
-    #     self.semesterDifficulty = self.calculateSemesterDifficulty()
-    #     self.totalCreditHours = self.calculateTotalCreditHours()
-
-    # #takes the list of courses and calculates the average difficulty
-    # #-1 semester difficulty means that none of the courses in the semester have difficulty ratings
-    # def calculateSemesterDifficulty(self)->float:
-    #     totalDifficulty = 0
-    #     numCourses = 0
-    #     for course in self.courses:
-    #         if(course.getDifficultyRating() != -1.0):
-    #             totalDifficulty += course.getDifficultyRating()
-    #             numCourses += 1
-    #     if numCourses != 0:
-    #         return round(totalDifficulty/numCourses,2)
-    #     else:
-    #         return -1
-    
-    # #takes the list of courses and calculates the totalCreditHours
-    # def calculateTotalCreditHours(self)->int:
-    #     creditHours = 0
-    #     for course in self.courses:
-    #         creditHours += course.getCreditHours()
-    #     return creditHours
