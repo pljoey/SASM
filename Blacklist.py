@@ -13,3 +13,9 @@ class Blacklist:
     
     def set_blacklist(self, blacklist):
         self.blacklist = blacklist
+
+    def add_blacklist(course): 
+        blacklist.append(course)
+
+    def remove_From_Blacklist(course):
+        blacklist.remove(course)
