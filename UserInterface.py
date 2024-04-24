@@ -1,6 +1,10 @@
-class UserInterface:
+import CourseController
 
-    def start_menu():
+class UserInterface:
+    def __init__(self):
+        self.course_controller = CourseController.CourseController()
+
+    def start_menu(self):
         valid_input = False
         while not valid_input:
             print("Please choose an option by typing the respective number:")
@@ -10,10 +14,9 @@ class UserInterface:
             response = input()
             match response:
                 case "1":
-                    UserInterface.sign_up()
-                    valid_input = True
+                    self.sign_up()
                 case "2":
-                    UserInterface.login()
+                    self.login()
                     valid_input = True
                 case "3":
                     print("Goodbye!")
@@ -22,9 +25,9 @@ class UserInterface:
                     print("not a valid input \n")
             
 
-    def basic_menu():
-        valid_input = False
-        while not valid_input:
+    def basic_menu(self):
+        back = False
+        while not back:
             print("Please choose an option by typing the respective number:")
             print("1. Create schedule")
             print("2. View/edit schedule")
@@ -34,53 +37,91 @@ class UserInterface:
             response = input()
             match response:
                 case "1":
-                    UserInterface.create_schedule_menu()
-                    valid_input = True
+                    self.create_schedule_menu()
                 case "2":
-                    UserInterface.view_schedule_menu()
-                    valid_input = True
+                    self.view_schedule_menu()
                 case "3":
-                    UserInterface.view_info_menu()
-                    valid_input = True
+                    self.view_info_menu()
                 case "4":
-                    UserInterface.account_menu()
-                    valid_input = True
+                    self.account_menu()
                 case "5":
-                    UserInterface.start_menu()
-                    valid_input = True
+                    self.start_menu()
+                    back = True
                 case _:
                     print("not a valid input \n")
 
-    def sign_up():
+    def sign_up(self):
         print("please sign up")
         pass
 
-    def login():
+    def login(self):
         print("I'm too lazy to implement login right now. Please pretend that you just finished logging in")
-        UserInterface.basic_menu()
+        self.basic_menu()
 
-    def create_schedule_menu():
+    def create_schedule_menu(self):
         print("menu for creating a schedule")
         print("IDK what is gonna be in this menu yet")
 
-    def view_schedule_menu():
-        print("menu for viewing schedule")
+    def view_schedule_menu(self):
+        back = False
+        while not back:
+            print("do you want to view or edit a schedule?")
+            print("1. View schedule")
+            print("2. Edit schedule")
+            print("3. Back")
+            response = input()
+            match response:
+                    case "1":
+                        print("viewing schedule")
+                    case "2":
+                        print("editting schedule")
+                    case "3":
+                        self.basic_menu()
+                    case _:
+                        print("not a valid input \n")
+        
 
-    def view_info_menu():
-        print("menu for viewing course and professor information")
+    def view_info_menu(self):
+        back = False
+        while not back:
+            print("do you want to view course or professor information?")
+            print("1. View course information")
+            print("2. View professor information")
+            print("3. Back")
+            response = input()
+            match response:
+                case "1":
+                    self.search_for_course()
+                case "2":
+                    self.search_for_professor()
+                case "3":
+                    self.basic_menu()
+                    back = True
+                case _:
+                    print("not a valid input \n")
 
-    def account_menu():
+    def account_menu(self):
         print("menu for viewing account")
 
-    def get_course_review():
+    def search_for_professor(self):
+        print("please enter a professor's last name:")
+        response = input()
+        valid_prof = self.course_controller.get_professor_info(response)
+
+    def search_for_course(self):
+        print("please enter a course's id:")
+        response = input()
+        valid_course = self.course_controller.get_course_info(response)
+
+    def get_course_review(self):
         pass
 
-    def save_schedule_to_account():
+    def save_schedule_to_account(self):
         pass
 
-    def edit_prefences():
+    def edit_prefences(self):
         pass
 
     
-
-UserInterface.start_menu()
+ui = UserInterface()
+ui.start_menu()
