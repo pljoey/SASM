@@ -1,6 +1,7 @@
 import pymysql
+from DatabaseAbstract import DatabaseAbstract
 
-class MariaDBImplementation:
+class MariaDBImplementation(DatabaseAbstract):
 
     def __init__(self):
         self.HOST = 'sasm-instance.cjweucaqyz2t.us-east-2.rds.amazonaws.com'
@@ -76,6 +77,18 @@ class MariaDBImplementation:
             connection.commit()
             print(cur.fetchone())
 
+    def change_password(self, username, hash_password):
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"UPDATE sasm_users SET password = '{hash_password}' WHERE username = '{username}'")
+            connection.commit()
+
+            print(cur.fetchone())
+
+
 database = MariaDBImplementation()
 database._fetch_version()
 database._show_tables()
@@ -84,3 +97,4 @@ print(database.check_user('testUser1'))
 print(database.get_user_pass('testUser'))
 #database.create_user('new_user','eek')
 print(database._get_user_id('testUser'))
+database.change_password('testUser', 'newPass')
