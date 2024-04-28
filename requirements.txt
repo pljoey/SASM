@@ -1,0 +1,2 @@
+#For interfacing with the database
+pymysql
