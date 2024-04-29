@@ -32,14 +32,14 @@ class Professor:
     def get_professor_reviews(self) -> list:
         return self.professor_reviews
 
-    def setProfessorReviews(self,reviews):
+    def set_professor_reviews(self,reviews):
         professorReviews = reviews
 
     
     #a value of -1.0 for score means that there is no score yet
-    def getScore(self)->float:
+    def get_score(self)->float:
         return self.score
     
-    def setScore(self, score):
+    def set_score(self, score):
         self.score = score
 
