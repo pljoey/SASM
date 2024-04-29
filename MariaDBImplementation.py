@@ -41,7 +41,7 @@ class MariaDBImplementation(DatabaseAbstract):
             
             return int(user_id[0])
 
-    def _gen_course_id(department, course_num):
+    def _gen_course_id(self, department, course_num):
         #Generating id based on numbers from course nom
         department = department.lower()
 
@@ -128,7 +128,7 @@ class MariaDBImplementation(DatabaseAbstract):
 
     def add_course(self, department, course_num, description):
         #Generating id based on numbers from course nom
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
@@ -140,7 +140,7 @@ class MariaDBImplementation(DatabaseAbstract):
 
 
     def get_course_description(self, department, course_num):
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
@@ -159,7 +159,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute("USE SASM")
             cur.execute("SELECT professor_id FROM professor ORDER BY user_id DESC LIMIT 1")
             last_professor_id = cur.fetchone()
-            last_professor_id = int(last_user_id[0])
+            last_professor_id = int(last_professor_id[0])
             new_professor_id = last_professor_id + 1
 
             cur.execute("INSERT INTO professor (professor_id, first_name, last_name, title, department) VALUES ({new_professor_id}, '{first_name}', '{last_name}', '{title}', '{department}')")
@@ -167,7 +167,7 @@ class MariaDBImplementation(DatabaseAbstract):
 
     def add_section(self, section_num, professor_first, professor_last, professor_dept, department, course_num, start_time, end_time):
         professor_id = self._get_prof_id(professor_id)
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
 
         #TODO: Convert times to sql time format
         start_time = start_time
@@ -182,7 +182,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.commit()
 
     def get_sections(self, department, course_num):
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
@@ -194,7 +194,7 @@ class MariaDBImplementation(DatabaseAbstract):
             return sections
 
     def add_course_to_blacklist(self, username, department, course_num):
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
         user_id = self._get_user_id(username)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -218,7 +218,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.commit()
 
     def remove_course_from_blacklist(self, username, department, course_num):
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
         user_id = self._get_user_id(username)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -255,7 +255,7 @@ class MariaDBImplementation(DatabaseAbstract):
             return blacklist
 
     def add_to_previous_courses(self, username, department, course_num):
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
         user_id = self._get_user_id(username)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -267,7 +267,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.commit()
 
     def remove_from_previous_courses(self, username, department, course_num):
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
         user_id = self._get_user_id(username)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -293,7 +293,7 @@ class MariaDBImplementation(DatabaseAbstract):
             return prev_courses
 
     def add_to_preferred_electives(self, username, department, course_num):
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
         user_id = self._get_user_id(username)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -305,7 +305,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.commit()
 
     def remove_from_preferred_electives(self, username, department, course_num):
-        course_id = _gen_course_id(department, course_num)
+        course_id = self._gen_course_id(department, course_num)
         user_id = self._get_user_id(username)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
