@@ -3,11 +3,20 @@ from DatabaseAbstract import DatabaseAbstract
 
 class MariaDBImplementation(DatabaseAbstract):
 
+    _instance = None
+
     def __init__(self):
         self.HOST = 'sasm-instance.cjweucaqyz2t.us-east-2.rds.amazonaws.com'
         self.USER = 'admin'
         self.PASSWORD = 'SASMpass'
         self.DATABASE = 'SASM'
+
+    @staticmethod
+    def get_instance():
+        if MariaDBImplementation._instance == None:
+            MariaDBImplementation._instance = MariaDBImplementation()
+        
+        return MariaDBImplementation._instance
 
     def _fetch_version(self):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)

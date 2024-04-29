@@ -11,6 +11,12 @@ class DatabaseAbstract(ABC):
         self.DATABASE = None
 
     @abstractmethod
+    def get_instance(self):
+        '''
+        Returns the instance of the databse for a singleton pattern
+        '''
+
+    @abstractmethod
     def get_user_pass(self, username):
         '''
         Returns the users hashed password
