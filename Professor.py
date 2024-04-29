@@ -3,72 +3,43 @@ import Review
 #methods and attributes for the professor class
 class Professor:
     #constructor
-    def __init__(self, firstName, lastName,prefix = "", professorReviews = [], score = -1.0):
-        self.firstName = firstName
-        self.lastName = lastName
+    def __init__(self, first_name, last_name, prefix = "", professor_reviews = [], score = -1.0):
+        self.first_name = first_name
+        self.last_name = last_name
         self.prefix = prefix
-        self.professorReviews = professorReviews
+        self.professor_reviews = professor_reviews
         self.score = score
 
     #getter and setter functions for all of the attributes
-    def getFirstName(self)-> str:
-        return self.firstName
+    def get_first_name(self)-> str:
+        return self.first_name
     
-    def setFirstName(self, name):
-        self.firstName = name
+    def set_first_name(self, name):
+        self.first_name = name
 
-    def getLastName(self)-> str:
-        return self.lastName
+    def get_last_name(self)-> str:
+        return self.last_name
     
-    def setLastName(self, name):
-        self.lastName = name
+    def set_last_name(self, name):
+        self.last_name = name
 
-    def getPrefix(self)-> str:
+    def get_prefix(self)-> str:
         return self.prefix
     
-    def setPrefix(self, pre):
+    def set_prefix(self, pre):
         self.prefix = pre
   
-    def getProfessorReviews(self) -> list:
-        return self.professorReviews
+    def get_professor_reviews(self) -> list:
+        return self.professor_reviews
 
-    def setProfessorReviews(self,reviews):
+    def set_professor_reviews(self,reviews):
         professorReviews = reviews
 
     
     #a value of -1.0 for score means that there is no score yet
-    def getScore(self)->float:
+    def get_score(self)->float:
         return self.score
     
-    def setScore(self, score):
+    def set_score(self, score):
         self.score = score
 
-    # def addProfessorReview(self, review):
-    #     self.professorReviews.append(review)
-    #     self.score = self.calculateScore()
-
-    # def removeProfessorReview(self, review):
-    #     self.professorReviews.remove(review)
-    #     self.score = self.calculateScore()
-
-    # def calculateScore(self)->float:
-    #     totalScore = 0
-    #     numReviews = 0
-    #     for review in self.professorReviews:
-    #         totalScore += review.getScore()
-    #         numReviews += 1
-    #     if numReviews == 0:
-    #         return -1.0
-    #     else:
-    #         return totalScore/numReviews
-
-    #gets out all professor information for printing
-    # def getAllInfo(self)->str:
-    #     if(self.prefix != "" and self.score != -1.0):
-    #         return  self.prefix + " " + self.firstName + " " + self.lastName +  " - Score: " + str(self.score)
-    #     elif(self.prefix != "" and self.score == -1.0):
-    #         return  self.prefix + " " + self.firstName + " " + self.lastName +  " - Score: " + "N/A"
-    #     elif(self.prefix == "" and self.score != -1.0):
-    #         return self.firstName + " " + self.lastName +  " - Rating: " + str(self.score)
-    #     else:
-    #         return  self.firstName + " " + self.lastName +  " - Rating: " + "N/A"
