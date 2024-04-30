@@ -3,52 +3,50 @@ import Professor
 #methods and attributes for Course class
 class Course:
     #constructor
-    def __init__(self, courseID, courseName, creditHours, isElective, difficultyRating = -1.0, professors = []):
-        self.courseID = courseID    
-        self.courseName = courseName    
-        self.creditHours = creditHours
-        self.isElective = isElective
-        self.difficultyRating = difficultyRating  
-        self.professors = professors     
+    def __init__(self, course_id, course_name, credit_hours, is_elective, difficulty_rating = -1.0, section_list = {}):
+        self.course_id = course_id    
+        self.course_name = course_name    
+        self.credit_hours = credit_hours
+        self.is_elective = is_elective
+        self.difficulty_rating = difficulty_rating  
+        self.section_list = section_list
+ 
     
     #getter and setter methods for all of the attributes
-    def getCourseID(self)->str:
-        return self.courseID
+    def get_course_id(self)->str:
+        return self.course_id
     
-    def setCourseID(self, id):
-        self.courseID = id
+    def set_course_id(self, id):
+        self.course_id = id
 
-    def getCourseName(self)->str:
-        return self.courseName
+    def get_course_name(self)->str:
+        return self.course_name
     
-    def setCourseName(self, name):
-        self.courseName = name
+    def set_course_name(self, name):
+        self.course_name = name
 
-    def getCreditHours(self)->int:
-        return self.creditHours
+    def get_credit_hours(self)->int:
+        return self.credit_hours
     
-    def setCreditHours(self, ch):
+    def set_credit_hours(self, ch):
         self.creditHours = ch
 
-    def getIsElective(self)->bool:
+    def ge_is_elective(self)->bool:
         return self.isElective
     
-    def setIsElective(self,elective):
-        self.isElective = elective
+    def set_is_elective(self,elective):
+        self.is_elective = elective
 
     #a value of -1.0 for difficultyRating means that there is no difficultyRating yet
-    def getDifficultyRating(self)->float:
-        return self.difficultyRating
+    def get_difficulty_rating(self)->float:
+        return self.difficulty_rating
     
-    def setDifficultyRating(self,diff):
-        self.difficultyRating = diff
+    def set_difficulty_rating(self,diff):
+        self.difficulty_rating = diff
+
+    def get_section_list(self)->dict:
+        return self.section_list
+    
+    def set_section_list(self,sections):
+        self.section_list = sections
         
-    def getProfessors(self)->list:
-        return self.professors
-    
-    #no setter for professors since its a list. Instead professor has add and remove methods
-    def addProfessor(self, prof):
-        self.professors.append(prof)
-    
-    def removeProfessor(self,prof):
-        self.professors.remove(prof)

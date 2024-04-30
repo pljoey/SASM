@@ -8,13 +8,14 @@ class Blacklist:
         self.blacklist = []
 
     #returns the blacklist
-    def getBlacklist(self)->list:
+    def get_blacklist(self)->list:
         return self.blacklist
     
-    #adds an item to the blacklist
-    def addToBlacklist(self, blacklisted):
-        self.blacklist.append(blacklisted)
+    def set_blacklist(self, blacklist):
+        self.blacklist = blacklist
 
-    #removes an item from the blacklist
-    def removeFromBlacklist(self, unBlacklisted):
-        self.blacklist.remove(unBlacklisted)
+    def add_blacklist(course): 
+        blacklist.append(course)
+
+    def remove_From_Blacklist(course):
+        blacklist.remove(course)

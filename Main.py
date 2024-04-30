@@ -12,7 +12,7 @@ def sign_up():
     the return value is the user
     """ 
     username = input("What is your username: ")
-    while(False): #check if username already exists
+    while(user_controller.find_username(username)): #check if username already exists
         username = input("Username already exists, try a new username: ")
     password = input("What is your password: ")
     if(input("Do you have any previous courses taken to list? (Y/N) " == "Y")):
@@ -25,18 +25,19 @@ def sign_up():
 
 def log_in():
     username = input("What is your username: ")
-    while(False): #check if username not found
+    while(not user_controller.find_username(username)): #check if username not found
         username = input("Username not found, please try again: ")
     password = input("What is the password: ")
-    while(False): #password does not match
+    while(not user_controller.check_password(username, password)): #password does not match
         password = input("Password was incorrect for username " + username + ", please try again: ")
+    return user_controller.get_user(username, password)
 
 def start():
     choice = input("Would you like to sign up(1) or log in(2)? (1/2)")
     if(choice == "1"):
-        sign_up()
+        return sign_up()
     elif(choice == "2"):
-        log_in()
+        return log_in()
 
 def edit_preferences(user):
     while(True):
