@@ -170,3 +170,9 @@ class DatabaseAbstract(ABC):
         '''
         pass
 
+    @abstractmethod
+    def delete_user(self, username):
+        '''
+        Deletes all user information from database
+        '''
+

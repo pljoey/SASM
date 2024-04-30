@@ -80,7 +80,9 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute("USE SASM")
             cur.execute("SELECT password FROM sasm_users WHERE username = '" + username + "'")
             user_pass = cur.fetchone()
-            return user_pass
+            if user_pass == None:
+                return None
+            return user_pass[0]
         
     def check_user(self, username):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -124,6 +126,8 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute("USE SASM")
             cur.execute(f"SELECT preferred_credit_hours FROM sasm_users WHERE username = '{username}'")
             credit_hours = cur.fetchone()
+            if credit_hours == None:
+                return None
             return int(credit_hours[0])
 
     def set_preferred_hours(self, username, hours):
@@ -157,8 +161,10 @@ class MariaDBImplementation(DatabaseAbstract):
             cur = connection.cursor()
             cur.execute("USE SASM")
             cur.execute(f"SELECT description FROM course WHERE course_id = {course_id}")
-            description = cur.fetchone()[0]
-            return description
+            description = cur.fetchone()
+            if description == None:
+                return None
+            return description[0]
 
     def add_professor(self, first_name, last_name, title, department):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -339,6 +345,21 @@ class MariaDBImplementation(DatabaseAbstract):
 
             return preferred_courses
 
+    def delete_user(self, username):
+        user_id = self._get_user_id(username)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"DELETE FROM preferred_electives WHERE user_id = '{user_id}'")
+            cur.execute(f"DELETE FROM previous_courses WHERE user_id = '{user_id}'")
+            cur.execute(f"DELETE FROM blacklist WHERE user_id = '{user_id}'")
+            cur.execute(f"DELETE FROM sasm_users WHERE user_id = '{user_id}'")
+
+            cur.commit()
+
 
 #database = MariaDBImplementation()
 #database._fetch_version()
@@ -351,3 +372,5 @@ class MariaDBImplementation(DatabaseAbstract):
 #database.change_password('testUser', 'newPass')
 
 #database.add_course('IT', 326, 'Test Description')
+
+#print(database.get_user_pass('Does Not Exist'))
