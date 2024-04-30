@@ -1,7 +1,8 @@
 #import CourseController
+import ratemyprofessor
 from Controllers import UserController
 
-user_controller = UserController()
+user_controller = UserController
 main_loop_string = "What would you like to do?\n1)Create Schedule\n2)Edit Schedule\n3)Edit Preferences\n4)View Course Information\n5)View Professor Information\n6)Exit"
 edit_preference_string = "What would you like to do?\n1)Edit Courses taken\n2)Edit BlackList"
 
