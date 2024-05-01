@@ -1,5 +1,8 @@
 class CourseController:
 
+    def __init__(self):
+        pass
+        
     def get_professor_info(self, prof)->bool:
         return True
     

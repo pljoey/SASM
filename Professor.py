@@ -1,14 +1,14 @@
-import Review
 
 #methods and attributes for the professor class
 class Professor:
     #constructor
-    def __init__(self, first_name, last_name, prefix = "", professor_reviews = [], score = -1.0):
+    def __init__(self, first_name, last_name, prefix = "", professor_reviews = [], rating = -1.0, difficulty = -1.0, would_take_again = -1.0):
         self.first_name = first_name
         self.last_name = last_name
         self.prefix = prefix
-        self.professor_reviews = professor_reviews
-        self.score = score
+        self.rating = rating
+        self.difficulty = difficulty
+        self.would_take_again = would_take_again
 
     #getter and setter functions for all of the attributes
     def get_first_name(self)-> str:
@@ -28,18 +28,21 @@ class Professor:
     
     def set_prefix(self, pre):
         self.prefix = pre
-  
-    def get_professor_reviews(self) -> list:
-        return self.professor_reviews
-
-    def set_professor_reviews(self,reviews):
-        professorReviews = reviews
-
     
-    #a value of -1.0 for score means that there is no score yet
-    def get_score(self)->float:
-        return self.score
+    def get_rating(self)->float:
+        return self.rating
     
-    def set_score(self, score):
-        self.score = score
+    def set_rating(self, rating):
+        self.rating = rating
 
+    def get_difficulty(self)->float:
+        return self.difficulty
+    
+    def set_difficulty(self, diff):
+        self.difficulty = diff
+
+    def get_would_take_again(self)->float:
+        return self.would_take_again
+
+    def set_would_take_again(self, would_take_again):
+        self.would_take_again = would_take_again

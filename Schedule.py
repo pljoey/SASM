@@ -1,23 +1,29 @@
-import Semester
-
 #methods and attributes for the Schedule class
 class Schedule:
     #constructor for schedule
-    def __init__ (self,semesters = [], type = ""):
-        self.semesters = semesters
-        self.schedule_type = type
+    def __init__ (self, name = "",courses = [], tch = 0):
+        self.name = name
+        self.courses = courses
+        self.total_credit_hours = tch
+        
 
     #getters for the above attributes
-    def get_semesters(self)->list:
-        return self.semesters
+    def get_name(self)->str:
+        return self.name
     
-    def set_semesters(self, semester):
-        self.semesters = semester
+    def set_name(self,name):
+        self.name = name
 
-    def get_schedule_type(self)->str:
-        return self.schedule_type
+    def get_courses(self)->list:
+        return self.courses
+    
+    def set_courses(self, course):
+        self.courses = course
 
-    def set_schdeule_type(self, type):
-        self.schedule_type = type
+    def get_total_credit_hours(self)->int:
+        return self.total_credit_hours
+
+    def set_total_credit_hours(self, hours):
+        self.total_credit_hours = hours
 
     

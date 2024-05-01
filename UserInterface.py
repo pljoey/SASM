@@ -101,7 +101,24 @@ class UserInterface:
                     print("not a valid input \n")
 
     def account_menu(self):
-        print("menu for viewing account")
+        print("do you want to view course or professor information?")
+        print("1. View account information")
+        print("2. edit prior courses")
+        print("3. edit preferences")
+        print("4. back")
+        response = input()
+        match response:
+            case "1":
+                self.view_account()
+            case "2":
+                course_controller.edit_prior_courses()
+            case "3":
+                course_controller.edit_preferences()
+            case "4":
+                self.basic_menu()
+                back = True
+            case _:
+                print("not a valid input \n")
 
     def search_for_professor(self):
         print("please enter a professor's last name:")
