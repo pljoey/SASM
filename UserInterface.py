@@ -57,7 +57,10 @@ class UserInterface:
         pass
 
     def login(self):
-        print("I'm too lazy to implement login right now. Please pretend that you just finished logging in")
+        print("Please input your username:")
+        username = input()
+        print("Please enter your password:")
+        password = input()
         self.basic_menu()
 
     def create_schedule_menu(self):

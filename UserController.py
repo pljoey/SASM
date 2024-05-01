@@ -2,30 +2,27 @@ from UserHandler import UserHandler
 
 class UserController:
     def __init__(self):
-        self.handler = UserController()
+        self._handler = UserHandler()
 
-    def create_user(username, password):
-        return UserHandler.create_user(username, password)
-
-    def login(username, password):
-        return UserHandler.login(username, password)
-
-    def logout():
-        UserHandler.logout()
-
-    def delete_user():
-        UserHandler.delete_user()
-
-    def edit_user_preferences():
-        # pass to user handler which passes to user which goes to preferences 
-        pass
-
-    def save_schedule_to_database():
-        # just pass to user handler
-        pass
-
-    def create_schedule():
-        # pass to user handler
+    def create_user(self, username, password):
+        return self._handler.create_user(username, password)
+    
+    def find_username(self, username):
+        return self._handler.find_user(username)
+    
+    def check_password(self, username, password):
+        return self._handler.check_password(username, password)
+    
+    def get_user(self, username, password):
+        return self._handler.get_user(username, password)
+    
+    def update_password(self, username, password):
+        return self._handler.update_password(username, password)
+    
+    def create_schedule(self):
+        return self._handler.create_schedule()
+    
+    def edit_schedule_name(self, name):
         pass
 
     def view_remaining_courses(self):

@@ -97,6 +97,25 @@ class MariaDBImplementation(DatabaseAbstract):
             username_db = cur.fetchone()
             return username_db != None
         
+    def check_password(self, username, password):
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute("SELECT username FROM sasm_users WHERE username = '" + username + "' AND password = '" + password + "'" )
+            username_db = cur.fetchone()
+            return username_db != None
+        
+    def update_password(self, username, password):
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"UPDATE sasm_users SET password = " + password + "WHERE username = " + username)
+            connection.commit()
+        
     def create_user(self, username, hash_password):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
@@ -109,7 +128,7 @@ class MariaDBImplementation(DatabaseAbstract):
             
             new_user_id = last_user_id + 1
 
-            cur.execute(f"INSERT INTO sasm_users (user_id, username, password) VALUES ('{new_user_id}', '{username}', '{hash_password}')")
+            cur.execute(f"INSERT INTO sasm_users (user_id, username, password) VALUES ({new_user_id}, '{username}', '{hash_password}')")
             connection.commit()
 
     def change_password(self, username, hash_password):
@@ -311,7 +330,7 @@ class MariaDBImplementation(DatabaseAbstract):
 
             course_list = []
 
-            if prev_course == None:
+            if prev_courses == None:
                 return course_list
 
             for prev_course in prev_courses:
@@ -375,10 +394,10 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"DELETE FROM preferred_electives WHERE user_id = '{user_id}'")
-            cur.execute(f"DELETE FROM previous_courses WHERE user_id = '{user_id}'")
-            cur.execute(f"DELETE FROM blacklist WHERE user_id = '{user_id}'")
-            cur.execute(f"DELETE FROM sasm_users WHERE user_id = '{user_id}'")
+            cur.execute(f"DELETE FROM preferred_electives WHERE user_id = {user_id}")
+            cur.execute(f"DELETE FROM previous_courses WHERE user_id = {user_id}")
+            cur.execute(f"DELETE FROM blacklist WHERE user_id = {user_id}")
+            cur.execute(f"DELETE FROM sasm_users WHERE user_id = {user_id}")
 
             connection.commit()
 
@@ -428,6 +447,7 @@ class MariaDBImplementation(DatabaseAbstract):
                 course_list.append(str(course_details[0]) +  ' ' + str(course_details[1]))
 
             return course_list
+
 
 database = MariaDBImplementation()
 #database._fetch_version()

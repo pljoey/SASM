@@ -3,13 +3,12 @@ import Professor
 #methods and attributes for Course class
 class Course:
     #constructor
-    def __init__(self, course_id, course_name, credit_hours, is_elective, difficulty_rating = -1.0, section_list = {}):
+    def __init__(self, course_id, course_name, credit_hours, is_elective, difficulty_rating = -1.0, section_dict = {}):
         self.course_id = course_id    
         self.course_name = course_name    
         self.credit_hours = credit_hours
         self.is_elective = is_elective
-        self.difficulty_rating = difficulty_rating  
-        self.section_list = section_list
+        self.section_dict = section_dict
  
     
     #getter and setter methods for all of the attributes
@@ -37,16 +36,18 @@ class Course:
     def set_is_elective(self,elective):
         self.is_elective = elective
 
-    #a value of -1.0 for difficultyRating means that there is no difficultyRating yet
-    def get_difficulty_rating(self)->float:
-        return self.difficulty_rating
+    def get_section_dict(self)->dict:
+        return self.section_dict
     
-    def set_difficulty_rating(self,diff):
-        self.difficulty_rating = diff
+    def set_section_dict(self,sections):
+        self.section_dict = sections
 
-    def get_section_list(self)->dict:
-        return self.section_list
-    
-    def set_section_list(self,sections):
-        self.section_list = sections
+    def add_section(self, section_num, prof, start_time, end_time, monday = False, tuesday = False, wednesday = False, thursday = False, friday = False):
+        self.section_dict.update({section_num:(prof, start_time,end_time,monday,tuesday,wednesday,thursday,friday)})
+
+    def remove_section(self, section_num):
+        self.section_dict.delete(section_num)
+
+    def get_section(self, section_num)->tuple[Professor.Professor, float, float, bool, bool, bool, bool, bool]:
+        return self.section_dict.get(section_num)
         
