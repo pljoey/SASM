@@ -1,6 +1,9 @@
 from UserHandler import UserHandler
 
 class UserController:
+    def __init__(self):
+        self.handler = UserController()
+
     def create_user(username, password):
         return UserHandler.create_user(username, password)
 
@@ -24,3 +27,6 @@ class UserController:
     def create_schedule():
         # pass to user handler
         pass
+
+    def view_remaining_courses(self):
+        return self.handler.view_remaining_courses()

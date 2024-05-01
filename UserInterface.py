@@ -1,8 +1,10 @@
-import CourseController
+from CourseController import CourseController
+from UserController import UserController
 
 class UserInterface:
     def __init__(self):
         self.course_controller = CourseController.CourseController()
+        self.user_controller = UserController.user_controller()
 
     def start_menu(self):
         valid_input = False
@@ -96,7 +98,11 @@ class UserInterface:
                 case "2":
                     self.search_for_professor()
                 case "3":
-                    self.view_remaining_course()
+                    # Left is a str array of all remaining coures. 
+                    left = self.view_remaining_course()
+                    for x in left:
+                        print(left.pop(0))   
+                                   
                     back = True
                 case "4":
                     self.basic_menu()
@@ -118,7 +124,7 @@ class UserInterface:
         valid_course = self.course_controller.get_course_info(response)
 
     def view_remaining_course(self):
-        valid_course = self.course_controller.view_remaining_course()
+        valid_course = self.user_controller.view_remaining_course()
 
     def get_course_review(self):
         pass
