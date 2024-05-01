@@ -1,7 +1,17 @@
+from UserHandler import UserHandler
+
 class UserController:
-    def create_user():
-        # pass to user handler 
-        pass
+    def create_user(username, password):
+        return UserHandler.create_user(username, password)
+
+    def login(username, password):
+        return UserHandler.login(username, password)
+
+    def logout():
+        UserHandler.logout()
+
+    def delete_user():
+        UserHandler.delete_user()
 
     def edit_user_preferences():
         # pass to user handler which passes to user which goes to preferences 
