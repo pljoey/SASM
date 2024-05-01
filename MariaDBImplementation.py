@@ -186,6 +186,7 @@ class MariaDBImplementation(DatabaseAbstract):
     def add_section(self, section_num, professor_first, professor_last, professor_dept, department, course_num, start_time, end_time, monday = False, tuesday = False, wednesday = False, thursday = False, friday = False):
         professor_id = self._get_prof_id(professor_first, professor_last, professor_dept)
         course_id = self._gen_course_id(department, course_num)
+        unique_section_id = self._gen_section_id(course_id, section_num)
 
         #TODO: Convert times to sql time format
         start_time = start_time
@@ -196,7 +197,7 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"INSERT INTO section (section_id, professor_id, start_time, end_time, course_id, monday, tuesday, wednesday, thursday, friday) VALUES ({section_num}, {professor_id}, '{start_time}', '{end_time}', {course_id}, {int(monday)}, {int(tuesday)}, {int(wednesday)}, {int(thursday)}, {int(friday)})")
+            cur.execute(f"INSERT INTO section (unique_id, section_id, professor_id, start_time, end_time, course_id, monday, tuesday, wednesday, thursday, friday) VALUES ({unique_section_id},{section_num}, {professor_id}, '{start_time}', '{end_time}', {course_id}, {int(monday)}, {int(tuesday)}, {int(wednesday)}, {int(thursday)}, {int(friday)})")
             connection.commit()
 
     #TODO: figure out how to format this
@@ -297,7 +298,6 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"DELETE FROM previous_courses WHERE user_id = {user_id} AND course_id = {course_id}")
             connection.commit()
 
-    #TODO: Figure out how to format output list of classes
     def get_previous_courses(self, username):
         user_id = self._get_user_id(username)
 
@@ -310,6 +310,9 @@ class MariaDBImplementation(DatabaseAbstract):
             prev_courses = cur.fetchone()
 
             course_list = []
+
+            if prev_course == None:
+                return course_list
 
             for prev_course in prev_courses:
                 cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {prev_course}")
@@ -341,7 +344,6 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute("USE SASM")
             cur.execute(f"DELETE FROM preferred_electives WHERE user_id = {user_id} AND course_id = {course_id}")
 
-    #TODO: Figure out formatting for return list for classes
     def get_preferred_electives(self, username):
         user_id = self._get_user_id(username)
 
@@ -353,7 +355,17 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"SELECT course_id FROM preferred_electives WHERE user_id = {user_id}")
             preferred_courses = cur.fetchone()
 
-            return preferred_courses
+            course_list = []
+
+            if preferred_courses == None:
+                return course_list
+
+            for preferred_course in preferred_courses:
+                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {preferred_course}")
+                course_details = cur.fetchone()
+                course_list.append(str(course_details[0]) +  ' ' + str(course_details[1]))
+
+            return course_list
 
     def delete_user(self, username):
         user_id = self._get_user_id(username)
@@ -381,6 +393,41 @@ class MariaDBImplementation(DatabaseAbstract):
             results = cur.fetchone()
 
             return results != None
+        
+    def add_course_prereqs(self, course_dept, course_num, prereq_dept, prereq_num):
+        course_id = self._gen_course_id(course_dept, course_num)
+        prereq_id = self._gen_course_id(prereq_dept, prereq_num)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"INSERT INTO prereqs (course_id, prereq_id) VALUES ({course_id}, {prereq_id})")
+            connection.commit()
+
+    def get_course_prereqs(self, course_dept, course_num):
+        course_id = self._gen_course_id(course_dept, course_num)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"SELECT prereq_id FROM prereqs WHERE course_id = {course_id}")
+            prereqs = cur.fetchone()
+
+            course_list = []
+
+            if prereqs == None:
+                return course_list
+            
+            for prereq in prereqs:
+                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {prereq}")
+                course_details = cur.fetchone()
+                course_list.append(str(course_details[0]) +  ' ' + str(course_details[1]))
+
+            return course_list
 
 database = MariaDBImplementation()
 #database._fetch_version()
