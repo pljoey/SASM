@@ -1,12 +1,12 @@
 #import CourseController
 import ratemyprofessor
-import UserController
+from UserController import UserController
 
+user_controller = UserController()
 main_loop_string = "What would you like to do?\n1)Create Schedule\n2)Edit Schedule\n3)Edit Preferences\n4)View Course Information\n5)View Professor Information\n6)Exit"
 edit_preference_string = "What would you like to do?\n1)Edit Courses taken\n2)Edit BlackList"
 
 def sign_up():
-    user_controller = UserController()
     """
     This function will create a new user and auto log the user in
     the return value is the user
@@ -15,7 +15,7 @@ def sign_up():
     while(user_controller.find_username(username)): #check if username already exists
         username = input("Username already exists, try a new username: ")
     password = input("What is your password: ")
-    if(input("Do you have any previous courses taken to list? (Y/N) " == "Y")):
+    if(input("Do you have any previous courses taken to list? (Y/N) ") == "Y"):
         courses_taken = input("What courses have you taken? Insert in a space separated lists, IE: 'IT386 IT383 ...' ")
         courses_taken = courses_taken.split(" ")
         return user_controller.create_user(username, password, courses_taken)
@@ -24,7 +24,6 @@ def sign_up():
 
 
 def log_in():
-    user_controller = UserController()
     username = input("What is your username: ")
     while(not user_controller.find_username(username)): #check if username not found
         username = input("Username not found, please try again: ")

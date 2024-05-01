@@ -6,8 +6,8 @@ from DatabaseManagementFactory import DatabaseManagementFactory
 
 class UserHandler:
     def __init__(self):
-        self.aUser
-        self.aSched
+        #self.aUser
+        #self.aSched
         self.database = DatabaseManagementFactory.get_database_instance('mariadb')
                  
     def create_user(self, username, password):

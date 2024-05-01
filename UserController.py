@@ -1,11 +1,11 @@
-import UserHandler
+from UserHandler import UserHandler
 
 class UserController:
     def __init__(self):
         self._handler = UserHandler()
 
-    def create_user(self, username, password, courses_taken = []):
-        return self._handler.create_user(username, password, courses_taken)
+    def create_user(self, username, password):
+        return self._handler.create_user(username, password)
     
     def find_username(self, username):
         return self._handler.find_user(username)
