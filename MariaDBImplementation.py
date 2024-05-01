@@ -61,7 +61,7 @@ class MariaDBImplementation(DatabaseAbstract):
 
         course_id = course_id + str(course_num)
 
-        return course_id
+        return int(course_id)
 
     def _get_prof_id(self, professor_first, professor_last, department):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -71,6 +71,9 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute("USE SASM")
             cur.execute(f"SELECT professor_id FROM professor WHERE first_name = '{professor_first}' AND last_name = '{professor_last}' AND department = '{department}'")
             return cur.fetchone()[0]
+
+    def _gen_section_id(self, course_id, section_num):
+        pass
 
     def get_user_pass(self, username):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -360,6 +363,17 @@ class MariaDBImplementation(DatabaseAbstract):
 
             cur.commit()
 
+    def check_for_course(self, department, course_num):
+        course_id = self._gen_course_id(department, course_num)
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"SELECT * FROM course WHERE course_id = {course_id}")
+            results = cur.fetchone()
+
+            return results != None
 
 #database = MariaDBImplementation()
 #database._fetch_version()

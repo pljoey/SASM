@@ -7,17 +7,15 @@ class UserHandler:
     def __init__(self):
         self.aUser
         self.aSched
-        self.aData
-        pass
+        self.database = DatabaseManagementFactory.get_database_instance('mariadb')
                  
     def create_user(self, username, password):
-        database_instance = DatabaseManagementFactory.get_database_instance('mariadb')
         hashed_password = hash(password)
 
-        if database_instance.check_user(username):
+        if self.database.check_user(username):
             return False
 
-        database_instance.create_user(username, hashed_password)
+        self.database.create_user(username, hashed_password)
         return True
 
     def login(self, username, password):
@@ -40,7 +38,6 @@ class UserHandler:
     def logout(self):
         self.aUser = None
         self.aSched = None
-        self.aData = None
 
     def delete_user(self):
         database_instance = DatabaseManagementFactory.get_database_instance('mariadb')

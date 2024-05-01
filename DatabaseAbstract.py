@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from datetime import time
 
 class DatabaseAbstract(ABC):
 
@@ -176,3 +175,10 @@ class DatabaseAbstract(ABC):
         Deletes all user information from database
         '''
 
+    @abstractmethod
+    def check_for_course(self, department, course_num):
+        '''
+        Returns true if course exists in database
+        '''
+
+    
