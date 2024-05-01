@@ -1,6 +1,7 @@
 import User
 #import exportableFormatHandler
 import Schedule
+import Preferences
 from DatabaseManagementFactory import DatabaseManagementFactory
 import hashlib
 
@@ -8,6 +9,7 @@ class UserHandler:
     def __init__(self):
         self.aUser = None
         self.aSched = None
+
         self.database = DatabaseManagementFactory.get_database_instance('mariadb')
                  
     def create_user(self, username, password):
@@ -56,8 +58,7 @@ class UserHandler:
         pass
 
     def create_schedule(self):
-        #We should pass a 
-        pass
+        self.aUser.get_schedules
 
     def edit_schedule(self):
         pass
@@ -67,3 +68,18 @@ class UserHandler:
 
     def save_schedule_to_exportable_format(self):
         pass
+
+    def find_user(self, username):
+        return self.database.check_user(username)
+    
+    def check_password(self, username, password):
+        hashed_password = hash(password)
+        return self.database.check_password(username, hashed_password)
+    
+    def update_password(self, username, password):
+        hashed_password = hash(password)
+        self.database.update_password(username, hashed_password)
+        courses_taken = self.database.get_previous_courses(username)
+        preferences = Preferences(self.database.get_preferred_hours(username), self.database.get_preferred_electives(username), self.database.get_blacklist(username))
+        saved_schedule = self.database #add get saved schedule function
+        return User(username, courses_taken, saved_schedule, preferences)

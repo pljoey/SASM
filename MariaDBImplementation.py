@@ -97,6 +97,25 @@ class MariaDBImplementation(DatabaseAbstract):
             username_db = cur.fetchone()
             return username_db != None
         
+    def check_password(self, username, password):
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute("SELECT username FROM sasm_users WHERE username = '" + username + "' AND password = '" + password + "'" )
+            username_db = cur.fetchone()
+            return username_db != None
+        
+    def update_password(self, username, password):
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"UPDATE sasm_users SET password = " + password + "WHERE username = " + username)
+            connection.commit()
+        
     def create_user(self, username, hash_password):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
