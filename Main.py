@@ -1,8 +1,9 @@
-#import CourseController
+from CourseController import CourseController
 import ratemyprofessor
 from UserController import UserController
 
 user_controller = UserController()
+course_controller = CourseController()
 main_loop_string = "What would you like to do?\n1)Create Schedule\n2)Edit Schedule\n3)Edit Preferences\n4)View Course Information\n5)View Professor Information\n6)Exit"
 edit_preference_string = "What would you like to do?\n1)Edit Courses taken\n2)Edit BlackList"
 
@@ -56,21 +57,27 @@ def edit_preferences(user):
         else:
             print("Incorrect Choice")
 
+def view_professor_information():
+    choice = input("Input professor name: ")
+    course_controller.get_professor_info(choice)
+
+
 if __name__ == "__main__":
     user = start()
+    print()
     while(True):
         choice = input(main_loop_string)
-        if(choice == "1"):
+        if(choice == "1"): #create schedule
             pass
-        elif(choice == "2"):
+        elif(choice == "2"): #edit schedule
             pass
-        elif(choice == "3"):
+        elif(choice == "3"): #Edit preferences
             edit_preferences(user)
-        elif(choice == "4"):
+        elif(choice == "4"): #view course info
             pass
-        elif(choice == "5"):
-            pass
-        elif(choice == "6"):
+        elif(choice == "5"): #view professor info
+            view_professor_information()
+        elif(choice == "6"): #exit
             break
         else:
             print("Incorrect Choice")

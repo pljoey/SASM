@@ -202,6 +202,15 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"INSERT INTO professor (professor_id, first_name, last_name, title, department) VALUES ({new_professor_id}, '{first_name}', '{last_name}', '{title}', '{department}')")
             cur.commit()
 
+    def get_professor(self, prof_id):
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute("SELECT * FROM professor where prof_id = " + prof_id)
+            cur.commit()
+            
     def add_section(self, section_num, professor_first, professor_last, professor_dept, department, course_num, start_time, end_time, monday = False, tuesday = False, wednesday = False, thursday = False, friday = False):
         professor_id = self._get_prof_id(professor_first, professor_last, professor_dept)
         course_id = self._gen_course_id(department, course_num)
