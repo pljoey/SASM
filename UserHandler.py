@@ -1,4 +1,4 @@
-import User
+from User import User
 #import exportableFormatHandler
 import Schedule
 from DatabaseManagementFactory import DatabaseManagementFactory
@@ -36,6 +36,8 @@ class UserHandler:
             return False
     
     def logout(self):
+        # Adding functionality
+        ## If someone logs out it will update the user's preferences, courses taken, and schedule
         self.aUser = None
         self.aSched = None
 
@@ -65,7 +67,7 @@ class UserHandler:
     def save_schedule_to_exportable_format(self):
         pass
 
-    def view_remaining_course(self):
+    def view_remaining_courses(self):
         reqs = {
             "COM 223",
             "ENG 249",
@@ -94,3 +96,10 @@ class UserHandler:
             if x not in prevCourses:
                 result.append(x)
         return result
+
+    def add_previous_courses(self,course):
+        #takes a string like 'IT 326'
+        taken = self.database.get_previous_courses()
+        if self.database.check_for_course(course) and course not in taken:
+            taken.append(course)
+            self.database.add_to_previous_courses(course)

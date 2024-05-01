@@ -86,7 +86,7 @@ class UserInterface:
     def view_info_menu(self):
         back = False
         while not back:
-            print("do you want to view course or professor information?")
+            print("What information would you like to view?")
             print("1. View course information")
             print("2. View professor information")
             print("3. View Remaining courses")
@@ -98,20 +98,28 @@ class UserInterface:
                 case "2":
                     self.search_for_professor()
                 case "3":
-                    # Left is a str array of all remaining coures. 
-                    left = self.view_remaining_course()
-                    for x in left:
-                        print(left.pop(0))   
-                                   
-                    back = True
-                case "4":
                     self.basic_menu()
                     back = True
                 case _:
                     print("not a valid input \n")
 
     def account_menu(self):
-        print("menu for viewing account")
+            print("What would you like to do?")
+            print("1. Placeholder")
+            print("2. Add previous courses")
+            print("3. View Remaining courses")
+            print("4. Back")
+            response = input()
+            match response:
+                case "1":
+                    #self.search_for_course()
+                    pass
+                case "2":
+                    self.add_previous_courses()
+                case "3":
+                    self.view_remaining_courses()
+
+        
 
     def search_for_professor(self):
         print("please enter a professor's last name:")
@@ -123,8 +131,14 @@ class UserInterface:
         response = input()
         valid_course = self.course_controller.get_course_info(response)
 
-    def view_remaining_course(self):
-        valid_course = self.user_controller.view_remaining_course()
+    def view_remaining_courses(self):
+        left = self.user_controller.view_remaining_courses()
+        for x in left:
+            print(left.pop(0))   
+
+    def add_previous_courses(self):
+        #Request an input in the form 'IT 326', then pass to UserController
+        pass
 
     def get_course_review(self):
         pass
