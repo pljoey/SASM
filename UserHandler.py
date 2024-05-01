@@ -1,30 +1,66 @@
 import User
-import DatabaseManagementFactory
+#import exportableFormatHandler
+import Schedule
+from DatabaseManagementFactory import DatabaseManagementFactory
 
 class UserHandler:
     def __init__(self):
+        self.aUser
+        self.aSched
+        self.database = DatabaseManagementFactory.get_database_instance('mariadb')
+                 
+    def create_user(self, username, password):
+        hashed_password = hash(password)
+
+        if self.database.check_user(username):
+            return False
+
+        self.database.create_user(username, hashed_password)
+        return True
+
+    def login(self, username, password):
+        database_instance = DatabaseManagementFactory.get_database_instance('mariadb')
+        hashed_password = hash(password)
+
+        database_password = database_instance.get_user_pass(username)
+
+        logged_in = not (database_password == None or database_password != hashed_password)
+
+        if logged_in:
+            user_id = database_instance._get_user_id(username)
+            #TODO: Get rest of use information and add it to User object
+            self.aUser = User(username, user_id)
+            return True
+
+        else:
+            return False
+    
+    def logout(self):
+        self.aUser = None
+        self.aSched = None
+
+    def delete_user(self):
+        database_instance = DatabaseManagementFactory.get_database_instance('mariadb')
+
+        username = self.aUser.get_user_name()
+
+        self.logout()
+
+        database_instance.delete_user(username)
+
+    def edit_user_preferences(self):
+        self.aUser.set_preferences()
         pass
 
-    def create_user(self, username, password, courses_taken):
-        user = User(username, password, courses_taken)
-        return user
-    
-    def get_user(self, username, password):
-        #get all user information from the database
-        DatabaseManagementFactory.get_database_instance("mariadb")
-        #create a user object that matches the data from the database
-        user = User(username, password, courses_taken, user_id)
+    def create_schedule(self):
+        #We should pass a 
+        pass
 
-    def find_username(self, username):
-        DatabaseManagementFactory.get_database_instance("mariadb")
-        #check if the username is taken
-        #return true if taken false if available
+    def edit_schedule(self):
+        pass
 
-    def check_password(self, username, password):
-        DatabaseManagementFactory.get_database_instance("mariabd")
-        #check if the password matches with the username
-        #return true if match, false if mismatch
+    def save_schedule_to_database(self):
+        pass
 
-    def update_password(self, username, password):
-        #get user info from db then update password
-        return User(username, password, courses_taken)
+    def save_schedule_to_exportable_format(self):
+        pass

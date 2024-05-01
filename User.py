@@ -5,9 +5,8 @@ import Preferences
 #methods and attributes for User class
 class User:
     #constructor for User
-    def __init__(self, user_name, user_id,courses_taken = [], saved_schedules = [], preferences = Preferences.Preferences()):
+    def __init__(self, user_name,courses_taken = [], saved_schedules = [], preferences = Preferences.Preferences()):
         self.user_name = user_name
-        self.user_id = user_id
         self.courses_taken = courses_taken
         self.saved_schedules = saved_schedules
         self.preferences = preferences
@@ -18,12 +17,6 @@ class User:
     
     def set_user_name(self,user_name):
         self.user_name = user_name
-
-    def get_user_id(self)->int:
-        return self.user_id
-    
-    def set_user_id(self,id):
-        self.user_id = id
 
     def get_courses_taken(self)->list:
         return self.courses_taken
