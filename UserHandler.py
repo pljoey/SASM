@@ -1,6 +1,7 @@
 import User
 #import exportableFormatHandler
 import Schedule
+import Preferences
 from DatabaseManagementFactory import DatabaseManagementFactory
 
 class UserHandler:
@@ -64,3 +65,18 @@ class UserHandler:
 
     def save_schedule_to_exportable_format(self):
         pass
+
+    def find_user(self, username):
+        return self.database.check_user(username)
+    
+    def check_password(self, username, password):
+        hashed_password = hash(password)
+        return self.database.check_password(username, hashed_password)
+    
+    def update_password(self, username, password):
+        hashed_password = hash(password)
+        self.database.update_password(username, hashed_password)
+        courses_taken = self.database.get_previous_courses(username)
+        preferences = Preferences(self.database.get_preferred_hours(username), self.database.get_preferred_electives(username), self.database.get_blacklist(username))
+        saved_schedule = self.database #add get saved schedule function
+        return User(username, courses_taken, saved_schedule, preferences)

@@ -1,4 +1,4 @@
-from UserHandler import UserHandler
+import UserHandler
 
 class UserController:
     def __init__(self):
