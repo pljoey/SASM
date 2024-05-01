@@ -1,16 +1,20 @@
+import UserHandler
+
 class UserController:
-    def create_user():
-        # pass to user handler 
-        pass
+    def __init__(self):
+        self._handler = UserHandler()
 
-    def edit_user_preferences():
-        # pass to user handler which passes to user which goes to preferences 
-        pass
-
-    def save_schedule_to_database():
-        # just pass to user handler
-        pass
-
-    def create_schedule():
-        # pass to user handler
-        pass
+    def create_user(self, username, password, courses_taken = []):
+        return self._handler.create_user(username, password, courses_taken)
+    
+    def find_username(self, username):
+        return self._handler.find_user(username)
+    
+    def check_password(self, username, password):
+        return self._handler.check_password(username, password)
+    
+    def get_user(self, username, password):
+        return self._handler.get_user(username, password)
+    
+    def update_password(self, username, password):
+        return self._handler.update_password(username, password)

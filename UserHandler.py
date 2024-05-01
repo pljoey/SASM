@@ -1,35 +1,30 @@
 import User
-#import exportableFormatHandler
-import Schedule
-import DatabaseManagementHandler
+import DatabaseManagementFactory
 
 class UserHandler:
     def __init__(self):
-        self.aUser
-        self.aSched
-        self.aData
-        pass
-                 
-    def create_user(self):
-        name = input("Username:\n")
-        password = input("Password:\n")
-        self.aUser = User.User(name,password)
-        print("User made.\n")
         pass
 
-    def edit_user_preferences(self):
-        self.aUser.set_preferences()
-        pass
+    def create_user(self, username, password, courses_taken):
+        user = User(username, password, courses_taken)
+        return user
+    
+    def get_user(self, username, password):
+        #get all user information from the database
+        DatabaseManagementFactory.get_database_instance("mariadb")
+        #create a user object that matches the data from the database
+        user = User(username, password, courses_taken, user_id)
 
-    def create_schedule(self):
-        #We should pass a 
-        pass
+    def find_username(self, username):
+        DatabaseManagementFactory.get_database_instance("mariadb")
+        #check if the username is taken
+        #return true if taken false if available
 
-    def edit_schedule(self):
-        pass
+    def check_password(self, username, password):
+        DatabaseManagementFactory.get_database_instance("mariabd")
+        #check if the password matches with the username
+        #return true if match, false if mismatch
 
-    def save_schedule_to_database(self):
-        pass
-
-    def save_schedule_to_exportable_format(self):
-        pass
+    def update_password(self, username, password):
+        #get user info from db then update password
+        return User(username, password, courses_taken)

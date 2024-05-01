@@ -1,8 +1,8 @@
 #import CourseController
 import ratemyprofessor
-from Controllers import UserController
+import UserController
 
-user_controller = UserController
+user_controller = UserController()
 main_loop_string = "What would you like to do?\n1)Create Schedule\n2)Edit Schedule\n3)Edit Preferences\n4)View Course Information\n5)View Professor Information\n6)Exit"
 edit_preference_string = "What would you like to do?\n1)Edit Courses taken\n2)Edit BlackList"
 
@@ -29,10 +29,17 @@ def log_in():
         username = input("Username not found, please try again: ")
     password = input("What is the password: ")
     while(not user_controller.check_password(username, password)): #password does not match
-        password = input("Password was incorrect for username " + username + ", please try again: ")
+        password = input("Password was incorrect for username " + username + ", please try again: or enter '1' for forgot password")
+        if (password == "1"):
+            password = input("Input new password: ")
+            return user_controller.update_password(username, password)
     return user_controller.get_user(username, password)
 
 def start():
+    #setup professor information
+    professor_list = [] #this is a list of professors that are retrieved from the database so we can update the information using the api
+    ratemyprofessor.get_professors_by_school_and_name(ratemyprofessor.get_school_by_name("Illinois State University"), professor_list)
+    #update professor information then continue
     choice = input("Would you like to sign up(1) or log in(2)? (1/2)")
     if(choice == "1"):
         return sign_up()
