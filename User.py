@@ -5,10 +5,10 @@ import Preferences
 #methods and attributes for User class
 class User:
     #constructor for User
-    def __init__(self, user_name, courses_taken = [], saved_schedules = [], preferences = Preferences.Preferences()):
+    def __init__(self, user_name, courses_taken = [], current_schedule = None, preferences = Preferences.Preferences()):
         self.user_name = user_name
         self.courses_taken = courses_taken
-        self.saved_schedules = saved_schedules
+        self.current_schedule = current_schedule
         self.preferences = preferences
 
     #getters and setters for above attributes
@@ -24,11 +24,11 @@ class User:
     def set_courses_taken(self,courses):
         self.courses_taken = courses
 
-    def get_saved_schedules(self)->list:
-        return self.saved_schedules
+    def get_current_schedule(self)->Schedule.Schedule:
+        return self.current_schedule
     
-    def set_saved_schedules(self,schedules):
-        self.saved_schedules = schedules
+    def set_current_schedule(self,schedule):
+        self.current_schedule = schedule
 
     def get_preferences(self)->Preferences:
         return self.preferences

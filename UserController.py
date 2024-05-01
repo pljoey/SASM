@@ -18,3 +18,9 @@ class UserController:
     
     def update_password(self, username, password):
         return self._handler.update_password(username, password)
+    
+    def create_schedule(self):
+        return self._handler.create_schedule()
+    
+    def edit_schedule_name(self, name):
+        pass

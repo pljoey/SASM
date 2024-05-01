@@ -54,8 +54,7 @@ class UserHandler:
         pass
 
     def create_schedule(self):
-        #We should pass a 
-        pass
+        self.aUser.get_schedules
 
     def edit_schedule(self):
         pass
