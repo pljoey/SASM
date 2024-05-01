@@ -181,4 +181,14 @@ class DatabaseAbstract(ABC):
         Returns true if course exists in database
         '''
 
+    @abstractmethod
+    def add_course_prereqs(self, course_dept, course_num, prereq_dept, prereq_num):
+        '''
+        Adds a prerequisite course to another course
+        '''
     
+    @abstractmethod
+    def get_course_prereqs(self, course_dept, course_num):
+        '''
+        Returns a list of courses that are a prerequisite for the input course
+        '''
