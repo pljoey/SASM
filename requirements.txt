@@ -1,2 +1,3 @@
 #For interfacing with the database
 pymysql
+hashlib
