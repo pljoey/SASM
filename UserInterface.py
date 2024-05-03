@@ -97,7 +97,8 @@ class UserInterface:
         password = input()
 
         if self.user_controller.delete_user(password):
-            print('Account deleted')
+            print('Account deleted \n')
+            self.start_menu()
         else:
             print('Account not deleted')
 
@@ -149,7 +150,7 @@ class UserInterface:
         print("2. edit prior courses")
         print("3. edit preferences")
         print("4. Delete Account")
-        print("4. back")
+        print("5. back")
         response = input()
         match response:
             case "1":
@@ -161,7 +162,6 @@ class UserInterface:
             case "4":
                 #TODO: Fix going between start_menu and basic_menu
                 self.delete_user()
-                self.basic_menu()
             case "5":
                 self.basic_menu()
                 back = True
