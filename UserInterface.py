@@ -1,8 +1,10 @@
 import CourseController
+import UserController
 
 class UserInterface:
     def __init__(self):
         self.course_controller = CourseController.CourseController()
+        self.user_controller = UserController.UserController()
 
     def start_menu(self):
         valid_input = False
@@ -45,21 +47,59 @@ class UserInterface:
                 case "4":
                     self.account_menu()
                 case "5":
+                    self.logout()
                     self.start_menu()
                     back = True
                 case _:
                     print("not a valid input \n")
 
     def sign_up(self):
-        print("please sign up")
-        pass
+        user_created = False
+
+        while not user_created:
+            print("Please enter a username:")
+            username = input()
+            print("Please enter a password:")
+            password = input()
+
+            user_created = self.user_controller.create_user(username, password)
+
+            if not user_created:
+                print("A user with that Username already exists, please enter a new username")
+
+        print('User Created \n')
+
 
     def login(self):
-        print("Please input your username:")
-        username = input()
-        print("Please enter your password:")
-        password = input()
+        logged_in = False
+
+        while not logged_in:
+            print("Please input your username:")
+            username = input()
+            print("Please enter your password:")
+            password = input()
+
+            logged_in = self.user_controller.login(username, password)
+
+            if not logged_in:
+                print("Incorrect username or password please try again. \n") 
+
+        
         self.basic_menu()
+
+    def logout(self):
+        print('User Logged Out')
+        self.user_controller.logout()
+    
+    def delete_user(self):
+        print('All data associated with your account will be deleted. Are you sure you want to delete your account?')
+        print('If so, please enter your password')
+        password = input()
+
+        if self.user_controller.delete_user(password):
+            print('Account deleted')
+        else:
+            print('Account not deleted')
 
     def create_schedule_menu(self):
         print("menu for creating a schedule")
@@ -108,6 +148,7 @@ class UserInterface:
         print("1. View account information")
         print("2. edit prior courses")
         print("3. edit preferences")
+        print("4. Delete Account")
         print("4. back")
         response = input()
         match response:
@@ -118,6 +159,10 @@ class UserInterface:
             case "3":
                 course_controller.edit_preferences()
             case "4":
+                #TODO: Fix going between start_menu and basic_menu
+                self.delete_user()
+                self.basic_menu()
+            case "5":
                 self.basic_menu()
                 back = True
             case _:
