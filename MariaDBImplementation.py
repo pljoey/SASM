@@ -103,7 +103,7 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute("SELECT username FROM sasm_users WHERE username = '" + username + "' AND password = '" + password + "'" )
+            cur.execute(f"SELECT username FROM sasm_users WHERE username = '{username}' AND password = '{password}'")
             username_db = cur.fetchone()
             return username_db != None
         

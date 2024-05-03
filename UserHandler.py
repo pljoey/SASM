@@ -1,6 +1,5 @@
 import User
-#import exportableFormatHandler
-import Schedule
+#import exportableFormatFactory
 import Preferences
 from DatabaseManagementFactory import DatabaseManagementFactory
 import hashlib
@@ -23,18 +22,17 @@ class UserHandler:
         return True
 
     def login(self, username, password):
-        database_instance = DatabaseManagementFactory.get_database_instance('mariadb')
         new_hash = hashlib.shake_128(password.encode())
         hashed_password = new_hash.hexdigest(10)
 
-        database_password = database_instance.get_user_pass(username)
+        database_password = self.database.get_user_pass(username)
 
         logged_in = not (database_password == None or database_password != hashed_password)
 
         if logged_in:
-            user_id = database_instance._get_user_id(username)
+            user_id = self.database._get_user_id(username)
             #TODO: Get rest of use information and add it to User object
-            #self.aUser = User(username, user_id)
+            self.aUser = User.User(username, user_id)
             return True
 
         else:
@@ -44,14 +42,22 @@ class UserHandler:
         self.aUser = None
         self.aSched = None
 
-    def delete_user(self):
-        database_instance = DatabaseManagementFactory.get_database_instance('mariadb')
+    def delete_user(self, password):
+        new_hash = hashlib.shake_128(password.encode())
+        hashed_password = new_hash.hexdigest(10)
+
 
         username = self.aUser.get_user_name()
 
-        self.logout()
+        if self.database.check_password(username, hashed_password):
+            self.logout()
 
-        database_instance.delete_user(username)
+            self.database.delete_user(username)
+
+            return True
+        
+        return False
+        
 
     def edit_user_preferences(self):
         self.aUser.set_preferences()
@@ -71,10 +77,7 @@ class UserHandler:
 
     def find_user(self, username):
         return self.database.check_user(username)
-    
-    def check_password(self, username, password):
-        hashed_password = hash(password)
-        return self.database.check_password(username, hashed_password)
+
     
     def update_password(self, username, password):
         hashed_password = hash(password)

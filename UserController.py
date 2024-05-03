@@ -10,11 +10,14 @@ class UserController:
     def find_username(self, username):
         return self._handler.find_user(username)
     
-    def check_password(self, username, password):
-        return self._handler.check_password(username, password)
+    def login(self, username, password):
+        return self._handler.login(username, password)
     
-    def get_user(self, username, password):
-        return self._handler.get_user(username, password)
+    def logout(self):
+        return self._handler.logout()
+    
+    def delete_user(self, password):
+        return self._handler.delete_user(password)
     
     def update_password(self, username, password):
         return self._handler.update_password(username, password)
