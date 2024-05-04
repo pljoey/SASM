@@ -112,7 +112,8 @@ class UserInterface:
             print("do you want to view or edit a schedule?")
             print("1. View schedule")
             print("2. Edit schedule")
-            print("3. Back")
+            print("3. Export Schedule to Text file")
+            print("4. Back")
             response = input()
             match response:
                     case "1":
@@ -120,6 +121,8 @@ class UserInterface:
                     case "2":
                         print("editting schedule")
                     case "3":
+                        self.export_to_format()
+                    case "4":
                         self.basic_menu()
                     case _:
                         print("not a valid input \n")
@@ -186,6 +189,9 @@ class UserInterface:
 
     def edit_prefences(self):
         pass
+
+    def export_to_format(self):
+        self.user_controller.export_to_format()
 
     
 ui = UserInterface()

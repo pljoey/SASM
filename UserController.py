@@ -7,17 +7,17 @@ class UserController:
     def create_user(self, username, password):
         return self._handler.create_user(username, password)
     
-    def find_username(self, username):
-        return self._handler.find_user(username)
-    
     def login(self, username, password):
         return self._handler.login(username, password)
     
     def logout(self):
         return self._handler.logout()
-    
+        
     def delete_user(self, password):
         return self._handler.delete_user(password)
+    
+    def export_to_format(self):
+        return self.export_to_format()
     
     def update_password(self, username, password):
         return self._handler.update_password(username, password)
