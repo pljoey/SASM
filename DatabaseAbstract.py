@@ -95,7 +95,13 @@ class DatabaseAbstract(ABC):
     @abstractmethod
     def get_sections(self, department, course_num):
         '''
-        Returns a list of all sections and their professor for a specific course
+        Returns a list of all sections numbers
+        '''
+
+    @abstractmethod
+    def get_section_details(self, department, course_num, section_num):
+        '''
+        Returns the Details of a section
         '''
     
     @abstractmethod
