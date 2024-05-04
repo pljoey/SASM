@@ -74,6 +74,15 @@ class MariaDBImplementation(DatabaseAbstract):
 
     def _gen_section_id(self, course_id, section_num):
         return int(str(course_id) + '0' + str(section_num))
+    
+    def _get_schedule_id(self, user_id, schedule_name):
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"SELECT schedule_id FROM schedule_name WHERE schedule_name = '{schedule_name}' AND user_id = {user_id}")
+            return cur.fetchone()[0]
 
     def get_user_pass(self, username):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -447,9 +456,128 @@ class MariaDBImplementation(DatabaseAbstract):
                 course_list.append(str(course_details[0]) +  ' ' + str(course_details[1]))
 
             return course_list
+        
+    def create_schedule(self, username, name=None):
+        user_id = self._get_user_id(username)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            schedule_name = name
+
+            if name == None:
+                name_found = False
+                counter = 1
+
+                while not name_found:
+                    cur.execute(f"SELECT schedule_name FROM schedule_name WHERE schedule_name = 'schedule{counter}'")
+                    if cur.fetchone() == None:
+                        schedule_name = 'schedule' + str(counter)
+                        break
+            
+            cur.execute(f"SELECT schedule_id FROM schedule_name ORDER BY schedule_id DESC")
+            schedule_id = cur.fetchone()
+
+            if schedule_id == None:
+                schedule_id = 1
+
+            else:
+                schedule_id = cur.fetchone()[0] + 1
+
+            cur.execute(f"INSERT INTO schedule_name (user_id, schedule_name, schedule_id) VALUES ({user_id}, '{schedule_name}', {schedule_id})")
+
+            connection.commit()
+
+    
+    def edit_schedule_name(self, username, old_name, new_name):
+        user_id = self._get_user_id(username)
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+
+            cur.execute(f"SELECT schedule_name FROM schedule_name WHERE schedule_name = '{old_name}' AND user_id = {user_id}")
+
+            if cur.fetchone() != None:
+                return False
+            
+            cur.execute(f"SELECT schedule_name FROM schedule_name WHERE schedule_name = '{new_name}' AND user_id = {user_id}")
+            
+            if cur.fetchone() != None:
+                return False
+
+            cur.execute(f"UPDATE schedule_name SET schedule_name = '{new_name}' WHERE schedule_name = '{old_name}' AND user_id = {user_id}")
+            connection.commit()
+            
+
+    def delete_schedule(self, username, schedule_name):
+        user_id = self._get_user_id(username)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"SELECT * FROM schedule_name WHERE user_id = {user_id} AND schedule_name = '{schedule_name}'")
+
+            if cur.fetchone() == None:
+                return False
+            
+            cur.execute(f"DELETE FROM schedule_name WHERE user_id = {user_id} AND schedule_name = '{schedule_name}'")
+            connection.commit()
+
+    def get_user_schedule_names(self, username):
+        user_id = self._get_user_id(username)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"SELECT schedule_name FROM schedule_name WHERE user_id = {user_id}")
+            return cur.fetchone()
+
+    def add_section_to_schedule(self, username, schedule_name, course_dept, course_num, section_num):
+        user_id = self._get_user_id(username)
+        schedule_id = self._get_schedule_id(user_id, schedule_name)
+        course_id = self._gen_course_id(course_dept, course_num)
+        section_id = self._gen_section_id(course_id, section_num)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"INSERT INTO schedule_contents (schedule_id, unique_section_id) VALUES ({schedule_id}, {section_id})")
+            connection.commit()
+
+    def remove_section_from_schedule(self, username, schedule_name, course_dept, course_num, section_num):
+        user_id = self._get_user_id(username)
+        schedule_id = self._get_schedule_id(user_id, schedule_name)
+        course_id = self._gen_course_id(course_dept, course_num)
+        section_id = self._gen_section_id(course_id, section_num)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"DELETE FROM schedule_contents WHERE schedule_id = {schedule_id} AND unique_section_id = {section_id}")
+            connection.commit()
+
+    #TODO: Try and make this work
+    def get_sections_from_schedule(self, username, schedule_name):
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
 
 
-database = MariaDBImplementation()
+#database = MariaDBImplementation()
 #database._fetch_version()
 #database._show_tables()
 #print(database.check_user('testUser'))
@@ -463,6 +591,6 @@ database = MariaDBImplementation()
 
 #database.add_to_previous_courses('testUser', 'IT', 326)
 
-print(database.get_previous_courses('testUser'))
+#print(database.get_previous_courses('testUser'))
 
 #print(database.get_user_pass('Does Not Exist'))
