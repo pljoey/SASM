@@ -1,6 +1,7 @@
 import User
 import ExportableFormatFactory
 import Preferences
+import Schedule
 from DatabaseManagementFactory import DatabaseManagementFactory
 import hashlib
 
@@ -67,8 +68,40 @@ class UserHandler:
         self.aUser.set_preferences()
         pass
 
-    def create_schedule(self):
-        self.aUser.get_schedules
+    def create_schedule(self) -> bool:
+        cur_sched = self.aUser.get_current_schedule()
+        if(cur_sched == None):
+            new_sched = Schedule.Schedule()
+            self.aUser.set_current_schedule(new_sched)
+            #TODO for some reason this causes an infinite loop
+            self.database.create_schedule(self.aUser.get_user_name())
+            return True
+        else:
+            return False
+
+    def add_course(self, course_dept, course_id)->bool:
+        if self.aUser.get_current_schedule() == None or self.database.check_for_course(course_dept, int(course_id)) == False:
+            return False
+        else:
+            print(course_dept + course_id)
+            for Course in self.aUser.get_current_schedule().get_courses():
+                if Course.get_course_id() == (course_dept + course_id):
+                    return False
+            #TODO implement checks to make sure that the course can be added to the schedule
+            schedule = self.aUser.get_schedule()
+
+
+    def remove_course(self, course_dept, course_id)->bool: 
+        #TODO figure out how this is supposed to work
+        return self.database.remove_section_from_schedule(self.aUser.get_user_name, self.aUser.get_current_schedule().get_name(), course_dept, course_id,  )
+
+    
+    def delete_schedule(self)->bool:
+        #TODO this should work once all of the data is retrieved for the user during login
+        if self.aUser.get_current_schedule() != None:
+            return self.database.delete_schedule(self.aUser.get_user_name(), self.aUser.get_current_schedule().get_name())
+        else:
+            return False
 
     def edit_schedule(self):
         pass
