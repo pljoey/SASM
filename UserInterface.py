@@ -116,6 +116,7 @@ class UserInterface:
             print("1. View schedule")
             print("2. Edit schedule")
             print("3. Export Schedule to Text file")
+            print("4. create custom course")
             print("4. Back")
             response = input()
             match response:
@@ -125,6 +126,8 @@ class UserInterface:
                         self.schedule_edit_menu()
                     case "3":
                         self.export_to_format()
+                    case "4":
+                        self.create_custom_course_menu()
                     case "4":
                         self.basic_menu()
                     case _:
@@ -143,7 +146,10 @@ class UserInterface:
                 case "2":
                     self.user_controller.remove_course()
                 case "3":
-                    pass
+                    if self.user_controller.delete_schedule():
+                        print("Schedule successfully deleted")
+                    else:
+                        print("Schedule could not be deleted")
                 case "4":
                     self.view_schedule_menu()
                 case _:
@@ -208,6 +214,15 @@ class UserInterface:
         print("please enter a course's id number:")
         id = input()
         print(self.user_controller.add_course(dept, id))
+
+    def create_custom_course_menu(self):
+        print("please enter a name for the course")
+        name = input()
+        print("please enter the start time in the form hh:mm am/pm")
+        start_time = input()
+        print("please enter the end time in the form hh:mm am/pm")
+        start_time = input()
+        self.course_controller
 
     def get_course_review(self):
         pass
