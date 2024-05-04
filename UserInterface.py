@@ -191,6 +191,14 @@ class UserInterface:
     def account_menu(self):
         back = False
         while not back:
+            print("menu for viewing account")
+            print("1. Edit Preferences")
+            response = input()
+            match response:
+                case "1":
+                    self.edit_prefences()
+                    
+
             print("do you want to view course or professor information?")
             print("1. View account information")
             print("2. edit prior courses")

@@ -7,6 +7,7 @@ import hashlib
 import random
 
 class CourseHandler:
+    #method for the user to manually create a course 
     def __init__(self):
        self.database = DatabaseManagementFactory.get_database_instance('mariadb')
 
@@ -14,6 +15,7 @@ class CourseHandler:
     def create_course(course_name, course_time, section):
         pass
 
+    #
     def get_course_section_review(section):
         return
     

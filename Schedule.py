@@ -1,6 +1,9 @@
 #methods and attributes for the Schedule class
 class Schedule:
     #constructor for schedule
+    def __init__ (self,semesters = [], name = ""):
+        self.semesters = semesters
+        self.schedule_name = name
     def __init__ (self, name = "",courses = [], tch = 0):
         self.name = name
         self.courses = courses
@@ -20,6 +23,11 @@ class Schedule:
     def set_courses(self, course):
         self.courses = course
 
+    def get_schedule_name(self)->str:
+        return self.schedule_name
+
+    def set_schdeule_name(self, name):
+        self.schedule_type = name
     def get_total_credit_hours(self)->int:
         return self.total_credit_hours
 
