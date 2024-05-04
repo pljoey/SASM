@@ -59,7 +59,7 @@ class DatabaseAbstract(ABC):
         pass
 
     @abstractmethod
-    def add_course(self, department, course_num, description):
+    def add_course(self, department, course_num, description, course_name, credit_hours):
         '''
         adds a course to the database
         '''
@@ -71,6 +71,12 @@ class DatabaseAbstract(ABC):
         Returns the description from a course
         '''
         pass
+
+    @abstractmethod
+    def get_course_credit_hours(self, department, course_num):
+        '''
+        Returns the number of credit hours for a course
+        '''
 
     @abstractmethod
     def add_professor(self, first_name, last_name, title, department):
@@ -89,7 +95,13 @@ class DatabaseAbstract(ABC):
     @abstractmethod
     def get_sections(self, department, course_num):
         '''
-        Returns a list of all sections and their professor for a specific course
+        Returns a list of all sections numbers
+        '''
+
+    @abstractmethod
+    def get_section_details(self, department, course_num, section_num):
+        '''
+        Returns the Details of a section
         '''
     
     @abstractmethod

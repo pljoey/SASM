@@ -170,7 +170,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"UPDATE sasm_users SET preferred_credit_hours = {hours} WHERE username = '{username}'")
             connection.commit()
 
-    def add_course(self, department, course_num, description):
+    def add_course(self, department, course_num, description, course_name, credit_hours):
         #Generating id based on numbers from course nom
         course_id = self._gen_course_id(department, course_num)
 
@@ -179,7 +179,7 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"INSERT INTO course (course_id, department, course_num, description) VALUES ({course_id}, '{department}', {course_num}, '{description}')")
+            cur.execute(f"INSERT INTO course (course_id, department, course_num, description, course_name, credit_hours) VALUES ({course_id}, '{department}', {course_num}, '{description}', '{course_name}', {credit_hours})")
             connection.commit()
 
 
@@ -196,6 +196,20 @@ class MariaDBImplementation(DatabaseAbstract):
             if description == None:
                 return None
             return description[0]
+        
+    def get_course_credit_hours(self, department, course_num):
+        course_id = self._gen_course_id(department, course_num)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"SELECT credit_hours FROM course WHERE course_id = {course_id}")
+            credit_hours = cur.fetchone()
+            if credit_hours == None:
+                return None
+            return credit_hours[0]
 
     def add_professor(self, first_name, last_name, title, department):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -203,7 +217,7 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute("SELECT professor_id FROM professor ORDER BY user_id DESC LIMIT 1")
+            cur.execute("SELECT professor_id FROM professor ORDER BY professor_id DESC LIMIT 1")
             last_professor_id = cur.fetchone()
             last_professor_id = int(last_professor_id[0])
             new_professor_id = last_professor_id + 1
@@ -216,10 +230,6 @@ class MariaDBImplementation(DatabaseAbstract):
         course_id = self._gen_course_id(department, course_num)
         unique_section_id = self._gen_section_id(course_id, section_num)
 
-        #TODO: Convert times to sql time format
-        start_time = start_time
-        end_time = end_time
-
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
         with connection:
@@ -228,7 +238,6 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"INSERT INTO section (unique_id, section_id, professor_id, start_time, end_time, course_id, monday, tuesday, wednesday, thursday, friday) VALUES ({unique_section_id},{section_num}, {professor_id}, '{start_time}', '{end_time}', {course_id}, {int(monday)}, {int(tuesday)}, {int(wednesday)}, {int(thursday)}, {int(friday)})")
             connection.commit()
 
-    #TODO: figure out how to format this
     def get_sections(self, department, course_num):
         course_id = self._gen_course_id(department, course_num)
 
@@ -238,8 +247,38 @@ class MariaDBImplementation(DatabaseAbstract):
             cur = connection.cursor()
             cur.execute("USE SASM")
             cur.execute(f"SELECT section_id FROM section WHERE course_id = {course_id}")
-            sections = cur.fetchone()
-            return sections
+            sections = cur.fetchall()
+
+            section_nums = []
+
+            for section in sections:
+                section_nums.append(section[0])
+
+            return section_nums
+        
+    def get_section_details(self, department, course_num, section_num):
+        course_id = self._gen_course_id(department, course_num)
+        section_id = self._gen_section_id(course_id, section_num)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+
+            professor
+
+            cur.execute(f"SELECT start_time, end_time, monday, tuesday, wednesday, thursday, friday FROM section WHERE unique_id = {section_id}")
+            section_times = cur.fetchone()
+
+            
+            cur.execute(f"SELECT professor_id, FROM section WHERE unique_id = {section_id}")
+            professor_id = cur.fetchone()
+            if professor_id != None:
+                cur.execute(f"SELECT department, first_name, last_name, title FROM professor WHERE professor_id = {professor_id[0]}")
+                professor = cur.fetchone()
+
+            return (section_times, professor)
 
     def add_course_to_blacklist(self, username, department, course_num):
         course_id = self._gen_course_id(department, course_num)
@@ -289,7 +328,6 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"DELETE FROM blacklist WHERE user_id = {user_id} AND professor_id = {prof_id}")
             connection.commit()
 
-    #TODO: Figure out return type
     def get_blacklist(self, username):
         user_id = self._get_user_id(username)
 
@@ -298,9 +336,31 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"SELECT course_id, professor_id FROM blacklist WHERE user_id = {user_id}")
-            blacklist = cur.fetchone()
-            return blacklist
+            
+            course_blacklist = []
+
+            cur.execute(f"SELECT course_id FROM blacklist WHERE user_id = {user_id} AND course_id IS NOT NULL")
+            course_ids = cur.fetchall()
+
+            if course_ids != None:
+                for course_id in course_ids:
+                    cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id[0]}")
+                    course = cur.fetchone()
+                    course_blacklist.append(course[0] + " " + str(course[1]))
+
+
+            professor_blacklist = []
+
+            cur.execute(f"SELECT professor_id FROM blacklist WHERE user_id = {user_id} AND professor_id IS NOT NULL")
+            professor_ids = cur.fetchall()
+
+            if professor_ids != None:
+                for professor_id in professor_ids:
+                    cur.execute(f"SELECT first_name, last_name FROM professor WHERE professor_id = {professor_id[0]}")
+                    professor = cur.fetchone()
+                    professor_blacklist.append(professor[0] + " " + professor[1])
+
+            return (course_blacklist, professor_blacklist)
 
     def add_to_previous_courses(self, username, department, course_num):
         course_id = self._gen_course_id(department, course_num)
@@ -335,7 +395,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur = connection.cursor()
             cur.execute("USE SASM")
             cur.execute(f"SELECT course_id FROM previous_courses WHERE user_id = {user_id}")
-            prev_courses = cur.fetchone()
+            prev_courses = cur.fetchall()
 
             course_list = []
 
@@ -343,7 +403,7 @@ class MariaDBImplementation(DatabaseAbstract):
                 return course_list
 
             for prev_course in prev_courses:
-                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {prev_course}")
+                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {prev_course[0]}")
                 course_details = cur.fetchone()
                 course_list.append(str(course_details[0]) +  ' ' + str(course_details[1]))
 
@@ -476,6 +536,7 @@ class MariaDBImplementation(DatabaseAbstract):
                     if cur.fetchone() == None:
                         schedule_name = 'schedule' + str(counter)
                         break
+                    counter += 1
             
             cur.execute(f"SELECT schedule_id FROM schedule_name ORDER BY schedule_id DESC")
             schedule_id = cur.fetchone()
@@ -484,7 +545,7 @@ class MariaDBImplementation(DatabaseAbstract):
                 schedule_id = 1
 
             else:
-                schedule_id = cur.fetchone()[0] + 1
+                schedule_id = counter + 1
 
             cur.execute(f"INSERT INTO schedule_name (user_id, schedule_name, schedule_id) VALUES ({user_id}, '{schedule_name}', {schedule_id})")
 
@@ -568,16 +629,41 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"DELETE FROM schedule_contents WHERE schedule_id = {schedule_id} AND unique_section_id = {section_id}")
             connection.commit()
 
-    #TODO: Try and make this work
     def get_sections_from_schedule(self, username, schedule_name):
+        user_id = self._get_user_id(username)
+        schedule_id = self._get_schedule_id(user_id, schedule_name)
+
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
+            cur.execute(f"SELECT unique_section_id FROM schedule_contents WHERE schedule_id = {schedule_id}")
+            
+            section_ids = cur.fetchall()
+
+            if section_ids == None:
+                return []
+
+            course_section_list = []
+
+            for section_id in section_ids:
+                cur.execute(f"SELECT section_id FROM section WHERE unique_id = {section_id}")
+                section_num = cur.fetchone()[0]
+                
+                cur.execute(f"SELECT course_id FROM section WHERE unique_id = {section_id}")
+                course_id = cur.fetchone()[0]
+
+                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id}")
+                course_names = cur.fetchone()
+                final_course_name = course_names[0] + " " + str(course_names(1))
+
+                course_section_list.append((final_course_name, section_num))
+
+            return course_section_list
+            
 
 
-#database = MariaDBImplementation()
 #database._fetch_version()
 #database._show_tables()
 #print(database.check_user('testUser'))
@@ -594,3 +680,4 @@ class MariaDBImplementation(DatabaseAbstract):
 #print(database.get_previous_courses('testUser'))
 
 #print(database.get_user_pass('Does Not Exist'))
+

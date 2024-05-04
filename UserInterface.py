@@ -117,7 +117,7 @@ class UserInterface:
             print("2. Edit schedule")
             print("3. Export Schedule to Text file")
             print("4. create custom course")
-            print("4. Back")
+            print("5. Back")
             response = input()
             match response:
                     case "1":
@@ -128,32 +128,35 @@ class UserInterface:
                         self.export_to_format()
                     case "4":
                         self.create_custom_course_menu()
-                    case "4":
+                    case "5":
                         self.basic_menu()
                     case _:
                         print("not a valid input \n")
         
     def schedule_edit_menu(self):
-        print("please choose an option:")
-        print("1. Add course")
-        print("2. Remove course")
-        print("3. Delete Schedule")
-        print("4. Back")
-        response = input()
-        match response:
-                case "1":
-                    self.add_course_menu()
-                case "2":
-                    self.user_controller.remove_course()
-                case "3":
-                    if self.user_controller.delete_schedule():
-                        print("Schedule successfully deleted")
-                    else:
-                        print("Schedule could not be deleted")
-                case "4":
-                    self.view_schedule_menu()
-                case _:
-                    print("not a valid input \n")
+        back = False
+        while not back:
+            print("please choose an option:")
+            print("1. Add course")
+            print("2. Remove course")
+            print("3. Delete Schedule")
+            print("4. Back")
+            response = input()
+            match response:
+                    case "1":
+                        self.add_course_menu()
+                    case "2":
+                        self.user_controller.remove_course()
+                    case "3":
+                        if self.user_controller.delete_schedule():
+                            print("Schedule successfully deleted")
+                        else:
+                            print("Schedule could not be deleted")
+                    case "4":
+                        self.view_schedule_menu()
+                        back = True
+                    case _:
+                        print("not a valid input \n")
 
     def view_info_menu(self):
         back = False
@@ -186,28 +189,30 @@ class UserInterface:
                     print("not a valid input \n")
 
     def account_menu(self):
-        print("do you want to view course or professor information?")
-        print("1. View account information")
-        print("2. edit prior courses")
-        print("3. edit preferences")
-        print("4. Delete Account")
-        print("5. back")
-        response = input()
-        match response:
-            case "1":
-                self.view_account()
-            case "2":
-                self.course_controller.edit_prior_courses()
-            case "3":
-                self.course_controller.edit_preferences()
-            case "4":
-                #TODO: Fix going between start_menu and basic_menu
-                self.delete_user()
-            case "5":
-                self.basic_menu()
-                back = True
-            case _:
-                print("not a valid input \n")
+        back = False
+        while not back:
+            print("do you want to view course or professor information?")
+            print("1. View account information")
+            print("2. edit prior courses")
+            print("3. edit preferences")
+            print("4. Delete Account")
+            print("5. back")
+            response = input()
+            match response:
+                case "1":
+                    self.view_account()
+                case "2":
+                    self.course_controller.edit_prior_courses()
+                case "3":
+                    self.course_controller.edit_preferences()
+                case "4":
+                    #TODO: Fix going between start_menu and basic_menu
+                    self.delete_user()
+                case "5":
+                    self.basic_menu()
+                    back = True
+                case _:
+                    print("not a valid input \n")
 
     def search_for_professor(self):
         print("please enter a professor's last name:")
@@ -229,11 +234,14 @@ class UserInterface:
     def create_custom_course_menu(self):
         print("please enter a name for the course")
         name = input()
-        print("please enter the start time in the form hh:mm am/pm")
+        print("please enter the start time in the form hh:mm a/p")
         start_time = input()
-        print("please enter the end time in the form hh:mm am/pm")
-        start_time = input()
+        print("please enter the end time in the form hh:mm a/p")
+        end_time = input()
         self.course_controller
+        print("Please enter the days that the course is on in the format M/Tu/W/Th/F/")
+        days = input()
+        self.course_controller.add_custom_course(name,start_time,end_time,days)
 
     def get_course_review(self):
         pass
