@@ -289,7 +289,6 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"DELETE FROM blacklist WHERE user_id = {user_id} AND professor_id = {prof_id}")
             connection.commit()
 
-    #TODO: Figure out return type
     def get_blacklist(self, username):
         user_id = self._get_user_id(username)
 
@@ -298,9 +297,31 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"SELECT course_id, professor_id FROM blacklist WHERE user_id = {user_id}")
-            blacklist = cur.fetchone()
-            return blacklist
+            
+            course_blacklist = []
+
+            cur.execute(f"SELECT course_id FROM blacklist WHERE user_id = {user_id} AND course_id IS NOT NULL")
+            course_ids = cur.fetchall()
+
+            if course_ids != None:
+                for course_id in course_ids:
+                    cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id[0]}")
+                    course = cur.fetchone()
+                    course_blacklist.append(course[0] + " " + str(course[1]))
+
+
+            professor_blacklist = []
+
+            cur.execute(f"SELECT professor_id FROM blacklist WHERE user_id = {user_id} AND professor_id IS NOT NULL")
+            professor_ids = cur.fetchall()
+
+            if professor_ids != None:
+                for professor_id in professor_ids:
+                    cur.execute(f"SELECT first_name, last_name FROM professor WHERE professor_id = {professor_id[0]}")
+                    professor = cur.fetchone()
+                    professor_blacklist.append(professor[0] + " " + professor[1])
+
+            return (course_blacklist, professor_blacklist)
 
     def add_to_previous_courses(self, username, department, course_num):
         course_id = self._gen_course_id(department, course_num)
@@ -335,7 +356,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur = connection.cursor()
             cur.execute("USE SASM")
             cur.execute(f"SELECT course_id FROM previous_courses WHERE user_id = {user_id}")
-            prev_courses = cur.fetchone()
+            prev_courses = cur.fetchall()
 
             course_list = []
 
@@ -343,7 +364,7 @@ class MariaDBImplementation(DatabaseAbstract):
                 return course_list
 
             for prev_course in prev_courses:
-                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {prev_course}")
+                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {prev_course[0]}")
                 course_details = cur.fetchone()
                 course_list.append(str(course_details[0]) +  ' ' + str(course_details[1]))
 
@@ -577,7 +598,6 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute("USE SASM")
 
 
-#database = MariaDBImplementation()
 #database._fetch_version()
 #database._show_tables()
 #print(database.check_user('testUser'))
@@ -594,3 +614,4 @@ class MariaDBImplementation(DatabaseAbstract):
 #print(database.get_previous_courses('testUser'))
 
 #print(database.get_user_pass('Does Not Exist'))
+
