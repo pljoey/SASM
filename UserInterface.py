@@ -101,7 +101,16 @@ class UserInterface:
                     print("not a valid input \n")
 
     def account_menu(self):
-        print("menu for viewing account")
+        back = False
+        while not back:
+            print("menu for viewing account")
+            print("1. Edit Preferences")
+            response = input()
+            match response:
+                case "1":
+                    self.edit_prefences()
+                    
+
 
     def search_for_professor(self):
         print("please enter a professor's last name:")
