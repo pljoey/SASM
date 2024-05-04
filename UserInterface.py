@@ -102,6 +102,9 @@ class UserInterface:
         else:
             print('Account not deleted')
 
+    def fill_schedule():
+        self.user_controller.fill_schedule()
+
     def create_schedule_menu(self):
         success = self.user_controller.create_schedule()
         if success == True:

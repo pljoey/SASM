@@ -130,3 +130,6 @@ class UserHandler:
         preferences = Preferences(self.database.get_preferred_hours(username), self.database.get_preferred_electives(username), self.database.get_blacklist(username))
         saved_schedule = self.database #add get saved schedule function
         return User(username, courses_taken, saved_schedule, preferences)
+    
+    def fill_schedule():
+        

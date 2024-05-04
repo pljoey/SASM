@@ -36,3 +36,6 @@ class UserController:
     
     def edit_schedule_name(self, name):
         pass
+
+    def fill_schedule():
+        return self._handler.fill_schedule()
