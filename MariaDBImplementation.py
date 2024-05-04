@@ -536,6 +536,7 @@ class MariaDBImplementation(DatabaseAbstract):
                     if cur.fetchone() == None:
                         schedule_name = 'schedule' + str(counter)
                         break
+                    counter += 1
             
             cur.execute(f"SELECT schedule_id FROM schedule_name ORDER BY schedule_id DESC")
             schedule_id = cur.fetchone()
@@ -544,7 +545,7 @@ class MariaDBImplementation(DatabaseAbstract):
                 schedule_id = 1
 
             else:
-                schedule_id = cur.fetchone()[0] + 1
+                schedule_id = counter + 1
 
             cur.execute(f"INSERT INTO schedule_name (user_id, schedule_name, schedule_id) VALUES ({user_id}, '{schedule_name}', {schedule_id})")
 
