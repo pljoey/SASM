@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from datetime import time
 
 class DatabaseAbstract(ABC):
 
@@ -60,7 +59,7 @@ class DatabaseAbstract(ABC):
         pass
 
     @abstractmethod
-    def add_course(self, department, course_num, description):
+    def add_course(self, department, course_num, description, course_name, credit_hours):
         '''
         adds a course to the database
         '''
@@ -72,6 +71,12 @@ class DatabaseAbstract(ABC):
         Returns the description from a course
         '''
         pass
+
+    @abstractmethod
+    def get_course_credit_hours(self, department, course_num):
+        '''
+        Returns the number of credit hours for a course
+        '''
 
     @abstractmethod
     def add_professor(self, first_name, last_name, title, department):
@@ -90,7 +95,13 @@ class DatabaseAbstract(ABC):
     @abstractmethod
     def get_sections(self, department, course_num):
         '''
-        Returns a list of all sections and their professor for a specific course
+        Returns a list of all sections numbers
+        '''
+
+    @abstractmethod
+    def get_section_details(self, department, course_num, section_num):
+        '''
+        Returns the Details of a section
         '''
     
     @abstractmethod
@@ -170,3 +181,67 @@ class DatabaseAbstract(ABC):
         '''
         pass
 
+    @abstractmethod
+    def delete_user(self, username):
+        '''
+        Deletes all user information from database
+        '''
+
+    @abstractmethod
+    def check_for_course(self, department, course_num):
+        '''
+        Returns true if course exists in database
+        '''
+
+    @abstractmethod
+    def add_course_prereqs(self, course_dept, course_num, prereq_dept, prereq_num):
+        '''
+        Adds a prerequisite course to another course
+        '''
+    
+    @abstractmethod
+    def get_course_prereqs(self, course_dept, course_num):
+        '''
+        Returns a list of courses that are a prerequisite for the input course
+        '''
+
+    @abstractmethod
+    def create_schedule(self, username, name=None):
+        '''
+        Creates a schedule in the database
+        '''
+    
+    @abstractmethod
+    def edit_schedule_name(self, username, old_name, new_name):
+        '''
+        Renames a schedule in the database
+        '''
+
+    @abstractmethod
+    def delete_schedule(self, username, schedule_name):
+        '''
+        Deletes a schedule from the database
+        '''
+
+    @abstractmethod
+    def get_user_schedule_names(self, username):
+        '''
+        Returns a list of schedule names for a user
+        '''
+
+    @abstractmethod
+    def add_section_to_schedule(self, username, schedule_name, course_dept, course_num, section_num):
+        '''
+        Adds a section to a schedule
+        '''
+    @abstractmethod
+    def remove_section_from_schedule(self, username, schedule_name, course_dept, course_num, section_num):
+        '''
+        Removes a section from a schedule
+        '''
+
+    @abstractmethod
+    def get_sections_from_schedule(self, username, schedule_name):
+        '''
+        Gets a list of sections that are in a schedule
+        '''
