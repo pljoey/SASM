@@ -191,14 +191,6 @@ class UserInterface:
     def account_menu(self):
         back = False
         while not back:
-            print("menu for viewing account")
-            print("1. Edit Preferences")
-            response = input()
-            match response:
-                case "1":
-                    self.edit_prefences()
-                    
-
             print("do you want to view course or professor information?")
             print("1. View account information")
             print("2. edit prior courses")
@@ -210,7 +202,40 @@ class UserInterface:
                 case "1":
                     self.view_account()
                 case "2":
-                    self.course_controller.edit_prior_courses()
+                    print("1. Add prior courses")
+                    print("2. Remove prior courses")
+                    print("3. Back")
+                    response = input()
+                    match response:
+                        case "1":
+                            cont = "y"
+                            while cont ==  "y":
+                                print("Enter the name of a course: ")
+                                course = input()
+                                worked = self.user_controller.add_previous_courses(course)
+                                if worked:
+                                    print("Course added, add more (y/n): ")
+                                    cont = input()
+                                else:
+                                    print("Course not added, try more (y/n): ")
+                                    cont = input()
+                        case "2":
+                            cont = "y"
+                            while cont ==  "y":
+                                print("Enter the name of a course: ")
+                                course = input()
+                                worked = self.user_controller.remove_previous_course(course)
+                                if worked:
+                                    print("Course removed, remove more (y/n): ")
+                                    cont = input()
+                                else:
+                                    print("Course not removed, remove more (y/n): ")
+                                    cont = input()
+                        case "3":
+                            self.basic_menu()
+                            back = True
+                        case _:
+                            print("not a valid input \n")
                 case "3":
                     self.course_controller.edit_preferences()
                 case "4":
