@@ -124,28 +124,7 @@ class UserHandler:
 
 
     def view_remaining_courses(self):
-        reqs = {
-            "COM 223",
-            "ENG 249",
-            "IT 168",
-            "IT 179",
-            "IT 180",
-            "IT 191",
-            "IT 214",
-            "IT 225",
-            "IT 261",
-            "IT 279",
-            "IT 326",
-            "IT 327",
-            "IT 328",
-            "IT 378",
-            "IT 383",
-            "IT 386",
-            "IT 398",
-            "MAT 145",
-            "MAT 146",
-            "MAT 260"
-        }
+        reqs = {"COM 223",  "ENG 249","IT 168","IT 179","IT 180","IT 191","IT 214","IT 225","IT 261","IT 279","IT 326", "IT 327","IT 328","IT 378","IT 383","IT 386","IT 398","MAT 145", "MAT 146","MAT 260"}
         prevCourses = self.database.get_previous_courses()
         result = []
         for x in reqs:
@@ -153,9 +132,21 @@ class UserHandler:
                 result.append(x)
         return result
 
-    def add_previous_courses(self,course):
+    def add_previous_courses(self,course)->bool:
         #takes a string like 'IT 326'
         taken = self.database.get_previous_courses()
+        c_Split = course.split()
         if self.database.check_for_course(course) and course not in taken:
             taken.append(course)
-            self.database.add_to_previous_courses(course)
+            self.database.add_to_previous_courses(self.aUser.get_user_name(),c_Split.pop(0),c_Split.pop(0))
+            return True
+        return False
+
+    def remove_previous_course(self, course)->bool: 
+        taken = self.database.get_previous_courses()
+        c_Split = course.split()
+        if self.database.check_for_course(course) and course not in taken:
+            taken.remove(course)
+            self.database.remove_from_previous_courses(self.aUser.get_user_name(),c_Split.pop(0),c_Split.pop(0))
+            return True
+        return False 

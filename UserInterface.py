@@ -170,6 +170,16 @@ class UserInterface:
                 case "2":
                     self.search_for_professor()
                 case "3":
+                    print("Here are the remaining core courses for your major: ")
+                    list = self.user_controller.view_remaining_courses()
+                    y = 0
+                    for x in list:
+                        print(x," ", end='')
+                        y = y + 1
+                        if y == 3:
+                            print()
+                            y = 0                
+                case "4":
                     self.basic_menu()
                     back = True
                 case _:
