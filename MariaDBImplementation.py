@@ -598,7 +598,6 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute("USE SASM")
 
 
-database = MariaDBImplementation()
 #database._fetch_version()
 #database._show_tables()
 #print(database.check_user('testUser'))
@@ -616,4 +615,3 @@ database = MariaDBImplementation()
 
 #print(database.get_user_pass('Does Not Exist'))
 
-database.get_blacklist('nathan')
