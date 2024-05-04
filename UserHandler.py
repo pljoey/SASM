@@ -31,7 +31,12 @@ class UserHandler:
 
         if logged_in:
             #TODO: Get rest of use information and add it to User object
-            self.aUser = User.User(username)
+            previous_courses = self.database.get_previous_courses(username)
+            preferred_credit_hours = self.database.get_preferred_hours(username)
+            blacklist = self.database.get_blacklist(username)
+
+            self.database.get_blacklist(username)
+            self.aUser = User.User(username, courses_taken=self.database.get_previous_courses(username))
             return True
 
         return False

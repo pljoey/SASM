@@ -1,7 +1,11 @@
+from DatabaseManagementFactory import DatabaseManagementFactory
+from Course import Course
+
 class CourseController:
 
     def __init__(self):
-        pass
+        self.database_connection = DatabaseManagementFactory.get_database_instance('mariadb')
+        self.courses = []
         
     def get_professor_info(self, prof)->bool:
         return True
