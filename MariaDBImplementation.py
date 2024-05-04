@@ -230,10 +230,6 @@ class MariaDBImplementation(DatabaseAbstract):
         course_id = self._gen_course_id(department, course_num)
         unique_section_id = self._gen_section_id(course_id, section_num)
 
-        #TODO: Convert times to sql time format
-        start_time = start_time
-        end_time = end_time
-
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
         with connection:
@@ -242,7 +238,6 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"INSERT INTO section (unique_id, section_id, professor_id, start_time, end_time, course_id, monday, tuesday, wednesday, thursday, friday) VALUES ({unique_section_id},{section_num}, {professor_id}, '{start_time}', '{end_time}', {course_id}, {int(monday)}, {int(tuesday)}, {int(wednesday)}, {int(thursday)}, {int(friday)})")
             connection.commit()
 
-    #TODO: figure out how to format this
     def get_sections(self, department, course_num):
         course_id = self._gen_course_id(department, course_num)
 
@@ -253,7 +248,37 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute("USE SASM")
             cur.execute(f"SELECT section_id FROM section WHERE course_id = {course_id}")
             sections = cur.fetchall()
-            return sections
+
+            section_nums = []
+
+            for section in sections:
+                section_nums.append(section[0])
+
+            return section_nums
+        
+    def get_section_details(self, department, course_num, section_num):
+        course_id = self._gen_course_id(department, course_num)
+        section_id = self._gen_section_id(course_id, section_num)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+
+            professor
+
+            cur.execute(f"SELECT start_time, end_time, monday, tuesday, wednesday, thursday, friday FROM section WHERE unique_id = {section_id}")
+            section_times = cur.fetchone()
+
+            
+            cur.execute(f"SELECT professor_id, FROM section WHERE unique_id = {section_id}")
+            professor_id = cur.fetchone()
+            if professor_id != None:
+                cur.execute(f"SELECT department, first_name, last_name, title FROM professor WHERE professor_id = {professor_id[0]}")
+                professor = cur.fetchone()
+
+            return (section_times, professor)
 
     def add_course_to_blacklist(self, username, department, course_num):
         course_id = self._gen_course_id(department, course_num)
@@ -603,7 +628,6 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"DELETE FROM schedule_contents WHERE schedule_id = {schedule_id} AND unique_section_id = {section_id}")
             connection.commit()
 
-    #TODO: Try and make this work
     def get_sections_from_schedule(self, username, schedule_name):
         user_id = self._get_user_id(username)
         schedule_id = self._get_schedule_id(user_id, schedule_name)
