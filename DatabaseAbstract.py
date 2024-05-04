@@ -192,3 +192,44 @@ class DatabaseAbstract(ABC):
         '''
         Returns a list of courses that are a prerequisite for the input course
         '''
+
+    @abstractmethod
+    def create_schedule(self, username, name=None):
+        '''
+        Creates a schedule in the database
+        '''
+    
+    @abstractmethod
+    def edit_schedule_name(self, username, old_name, new_name):
+        '''
+        Renames a schedule in the database
+        '''
+
+    @abstractmethod
+    def delete_schedule(self, username, schedule_name):
+        '''
+        Deletes a schedule from the database
+        '''
+
+    @abstractmethod
+    def get_user_schedule_names(self, username):
+        '''
+        Returns a list of schedule names for a user
+        '''
+
+    @abstractmethod
+    def add_section_to_schedule(self, username, schedule_name, course_dept, course_num, section_num):
+        '''
+        Adds a section to a schedule
+        '''
+    @abstractmethod
+    def remove_section_from_schedule(self, username, schedule_name, course_dept, course_num, section_num):
+        '''
+        Removes a section from a schedule
+        '''
+
+    @abstractmethod
+    def get_sections_from_schedule(self, username, schedule_name):
+        '''
+        Gets a list of sections that are in a schedule
+        '''

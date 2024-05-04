@@ -97,7 +97,8 @@ class UserInterface:
         password = input()
 
         if self.user_controller.delete_user(password):
-            print('Account deleted')
+            print('Account deleted \n')
+            self.start_menu()
         else:
             print('Account not deleted')
 
@@ -111,7 +112,8 @@ class UserInterface:
             print("do you want to view or edit a schedule?")
             print("1. View schedule")
             print("2. Edit schedule")
-            print("3. Back")
+            print("3. Export Schedule to Text file")
+            print("4. Back")
             response = input()
             match response:
                     case "1":
@@ -119,6 +121,8 @@ class UserInterface:
                     case "2":
                         print("editting schedule")
                     case "3":
+                        self.export_to_format()
+                    case "4":
                         self.basic_menu()
                     case _:
                         print("not a valid input \n")
@@ -149,7 +153,7 @@ class UserInterface:
         print("2. edit prior courses")
         print("3. edit preferences")
         print("4. Delete Account")
-        print("4. back")
+        print("5. back")
         response = input()
         match response:
             case "1":
@@ -161,7 +165,6 @@ class UserInterface:
             case "4":
                 #TODO: Fix going between start_menu and basic_menu
                 self.delete_user()
-                self.basic_menu()
             case "5":
                 self.basic_menu()
                 back = True
@@ -186,6 +189,9 @@ class UserInterface:
 
     def edit_prefences(self):
         pass
+
+    def export_to_format(self):
+        self.user_controller.export_to_format()
 
     
 ui = UserInterface()
