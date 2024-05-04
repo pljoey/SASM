@@ -36,3 +36,12 @@ class UserController:
     
     def edit_schedule_name(self, name):
         pass
+
+    def view_remaining_courses(self):
+        return self._handler.view_remaining_courses()
+    
+    def add_previous_courses(self,course)->bool:
+        return self._handler.add_previous_courses(course)
+
+    def remove_previous_course(self,course)->bool:
+        return self._handler.remove_previous_course(course)

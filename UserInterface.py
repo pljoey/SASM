@@ -161,10 +161,11 @@ class UserInterface:
     def view_info_menu(self):
         back = False
         while not back:
-            print("do you want to view course or professor information?")
+            print("What information would you like to view?")
             print("1. View course information")
             print("2. View professor information")
-            print("3. Back")
+            print("3. View Remaining courses")
+            print("4. Back")
             response = input()
             match response:
                 case "1":
@@ -172,6 +173,16 @@ class UserInterface:
                 case "2":
                     self.search_for_professor()
                 case "3":
+                    print("Here are the remaining core courses for your major: ")
+                    list = self.user_controller.view_remaining_courses()
+                    y = 0
+                    for x in list:
+                        print(x," ", end='')
+                        y = y + 1
+                        if y == 3:
+                            print()
+                            y = 0                
+                case "4":
                     self.basic_menu()
                     back = True
                 case _:
