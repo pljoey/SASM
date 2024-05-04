@@ -196,6 +196,20 @@ class MariaDBImplementation(DatabaseAbstract):
             if description == None:
                 return None
             return description[0]
+        
+    def get_course_credit_hours(self, department, course_num):
+        course_id = self._gen_course_id(department, course_num)
+
+        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
+
+        with connection:
+            cur = connection.cursor()
+            cur.execute("USE SASM")
+            cur.execute(f"SELECT credit_hours FROM course WHERE course_id = {course_id}")
+            credit_hours = cur.fetchone()
+            if credit_hours == None:
+                return None
+            return credit_hours[0]
 
     def add_professor(self, first_name, last_name, title, department):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -238,7 +252,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur = connection.cursor()
             cur.execute("USE SASM")
             cur.execute(f"SELECT section_id FROM section WHERE course_id = {course_id}")
-            sections = cur.fetchone()
+            sections = cur.fetchall()
             return sections
 
     def add_course_to_blacklist(self, username, department, course_num):
@@ -591,11 +605,38 @@ class MariaDBImplementation(DatabaseAbstract):
 
     #TODO: Try and make this work
     def get_sections_from_schedule(self, username, schedule_name):
+        user_id = self._get_user_id(username)
+        schedule_id = self._get_schedule_id(user_id, schedule_name)
+
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
+            cur.execute(f"SELECT unique_section_id FROM schedule_contents WHERE schedule_id = {schedule_id}")
+            
+            section_ids = cur.fetchall()
+
+            if section_ids == None:
+                return []
+
+            course_section_list = []
+
+            for section_id in section_ids:
+                cur.execute(f"SELECT section_id FROM section WHERE unique_id = {section_id}")
+                section_num = cur.fetchone()[0]
+                
+                cur.execute(f"SELECT course_id FROM section WHERE unique_id = {section_id}")
+                course_id = cur.fetchone()[0]
+
+                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id}")
+                course_names = cur.fetchone()
+                final_course_name = course_names[0] + " " + str(course_names(1))
+
+                course_section_list.append((final_course_name, section_num))
+
+            return course_section_list
+            
 
 
 #database._fetch_version()
