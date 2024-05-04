@@ -102,8 +102,11 @@ class UserInterface:
             print('Account not deleted')
 
     def create_schedule_menu(self):
-        print("menu for creating a schedule")
-        print("IDK what is gonna be in this menu yet")
+        success = self.user_controller.create_schedule()
+        if success == True:
+            print("Schedule successfully created")
+        else:
+            print("Schedule already exists")
 
     def view_schedule_menu(self):
         back = False
@@ -117,12 +120,30 @@ class UserInterface:
                     case "1":
                         print("viewing schedule")
                     case "2":
-                        print("editting schedule")
+                        self.schedule_edit_menu()
                     case "3":
                         self.basic_menu()
                     case _:
                         print("not a valid input \n")
         
+    def schedule_edit_menu(self):
+        print("please choose an option:")
+        print("1. Add course")
+        print("2. Remove course")
+        print("3. Delete Schedule")
+        print("4. Back")
+        response = input()
+        match response:
+                case "1":
+                    self.add_course_menu()
+                case "2":
+                    self.user_controller.remove_course()
+                case "3":
+                    pass
+                case "4":
+                    self.view_schedule_menu()
+                case _:
+                    print("not a valid input \n")
 
     def view_info_menu(self):
         back = False
@@ -155,9 +176,9 @@ class UserInterface:
             case "1":
                 self.view_account()
             case "2":
-                course_controller.edit_prior_courses()
+                self.course_controller.edit_prior_courses()
             case "3":
-                course_controller.edit_preferences()
+                self.course_controller.edit_preferences()
             case "4":
                 #TODO: Fix going between start_menu and basic_menu
                 self.delete_user()
@@ -177,6 +198,13 @@ class UserInterface:
         print("please enter a course's id:")
         response = input()
         valid_course = self.course_controller.get_course_info(response)
+
+    def add_course_menu(self):
+        print("please enter a course's department:")
+        dept = input()
+        print("please enter a course's id number:")
+        id = input()
+        print(self.user_controller.add_course(dept, id))
 
     def get_course_review(self):
         pass

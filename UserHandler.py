@@ -1,6 +1,7 @@
 import User
 #import exportableFormatFactory
 import Preferences
+import Schedule
 from DatabaseManagementFactory import DatabaseManagementFactory
 import hashlib
 
@@ -63,8 +64,26 @@ class UserHandler:
         self.aUser.set_preferences()
         pass
 
-    def create_schedule(self):
-        self.aUser.get_schedules
+    def create_schedule(self) -> bool:
+        cur_sched = self.aUser.get_current_schedule()
+        if(cur_sched == None):
+            new_sched = Schedule.Schedule()
+            self.aUser.set_current_schedule(new_sched)
+            return True
+        else:
+            return False
+
+    def add_course(self, course_dept, course_id)->bool:
+        if self.aUser.get_current_schedule() == None or self.database.check_for_course(course_dept, int(course_id)) == False:
+            return False
+        else:
+            print(course_dept + course_id)
+            for Course in self.aUser.get_current_schedule().get_courses():
+                if Course.get_course_id() == (course_dept + course_id):
+                    return False
+
+    def remove_course(self, course_name)->bool: 
+        pass
 
     def edit_schedule(self):
         pass
