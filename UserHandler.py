@@ -1,7 +1,7 @@
-from User import User
-#import exportableFormatHandler
-import Schedule
+import User
+import ExportableFormatFactory
 import Preferences
+import Schedule
 from DatabaseManagementFactory import DatabaseManagementFactory
 import hashlib
 
@@ -9,7 +9,6 @@ class UserHandler:
     def __init__(self):
         self.aUser = None
         self.aSched = None
-
         self.database = DatabaseManagementFactory.get_database_instance('mariadb')
                  
     def create_user(self, username, password):
@@ -23,22 +22,19 @@ class UserHandler:
         return True
 
     def login(self, username, password):
-        database_instance = DatabaseManagementFactory.get_database_instance('mariadb')
         new_hash = hashlib.shake_128(password.encode())
         hashed_password = new_hash.hexdigest(10)
 
-        database_password = database_instance.get_user_pass(username)
+        database_password = self.database.get_user_pass(username)
 
         logged_in = not (database_password == None or database_password != hashed_password)
 
         if logged_in:
-            user_id = database_instance._get_user_id(username)
             #TODO: Get rest of use information and add it to User object
-            #self.aUser = User(username, user_id)
+            self.aUser = User.User(username)
             return True
 
-        else:
-            return False
+        return False
     
     def logout(self):
         # Adding functionality
@@ -46,21 +42,68 @@ class UserHandler:
         self.aUser = None
         self.aSched = None
 
-    def delete_user(self):
-        database_instance = DatabaseManagementFactory.get_database_instance('mariadb')
+    def export_to_format(self):
+        text_export = ExportableFormatFactory.get_format_instance_type('text')
+
+        schedule = self.aUser.current_schedule
+
+        text_export.export(schedule)
+
+    def delete_user(self, password):
+        new_hash = hashlib.shake_128(password.encode())
+        hashed_password = new_hash.hexdigest(10)
+
 
         username = self.aUser.get_user_name()
 
-        self.logout()
+        if self.database.check_password(username, hashed_password):
+            self.logout()
 
-        database_instance.delete_user(username)
+            self.database.delete_user(username)
+
+            return True
+        
+        return False
+        
 
     def edit_user_preferences(self):
         self.aUser.set_preferences()
         pass
 
-    def create_schedule(self):
-        self.aUser.get_schedules
+    def create_schedule(self) -> bool:
+        cur_sched = self.aUser.get_current_schedule()
+        if(cur_sched == None):
+            new_sched = Schedule.Schedule()
+            self.aUser.set_current_schedule(new_sched)
+            #TODO for some reason this causes an infinite loop
+            self.database.create_schedule(self.aUser.get_user_name())
+            return True
+        else:
+            return False
+
+    def add_course(self, course_dept, course_id)->bool:
+        if self.aUser.get_current_schedule() == None or self.database.check_for_course(course_dept, int(course_id)) == False:
+            return False
+        else:
+            print(course_dept + course_id)
+            for Course in self.aUser.get_current_schedule().get_courses():
+                if Course.get_course_id() == (course_dept + course_id):
+                    return False
+            #TODO implement checks to make sure that the course can be added to the schedule
+            schedule = self.aUser.get_schedule()
+
+
+    def remove_course(self, course_dept, course_id)->bool: 
+        #TODO figure out how this is supposed to work
+        return self.database.remove_section_from_schedule(self.aUser.get_user_name, self.aUser.get_current_schedule().get_name(), course_dept, course_id,  )
+
+    
+    def delete_schedule(self)->bool:
+        #TODO this should work once all of the data is retrieved for the user during login
+        if self.aUser.get_current_schedule() != None:
+            return self.database.delete_schedule(self.aUser.get_user_name(), self.aUser.get_current_schedule().get_name())
+        else:
+            return False
 
     def edit_schedule(self):
         pass
@@ -70,13 +113,6 @@ class UserHandler:
 
     def save_schedule_to_exportable_format(self):
         pass
-
-    def find_user(self, username):
-        return self.database.check_user(username)
-    
-    def check_password(self, username, password):
-        hashed_password = hash(password)
-        return self.database.check_password(username, hashed_password)
     
     def update_password(self, username, password):
         hashed_password = hash(password)
