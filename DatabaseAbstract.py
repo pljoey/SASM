@@ -59,7 +59,7 @@ class DatabaseAbstract(ABC):
         pass
 
     @abstractmethod
-    def add_course(self, department, course_num, description):
+    def add_course(self, department, course_num, description, course_name, credit_hours):
         '''
         adds a course to the database
         '''

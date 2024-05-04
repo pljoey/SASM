@@ -170,7 +170,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"UPDATE sasm_users SET preferred_credit_hours = {hours} WHERE username = '{username}'")
             connection.commit()
 
-    def add_course(self, department, course_num, description):
+    def add_course(self, department, course_num, description, course_name, credit_hours):
         #Generating id based on numbers from course nom
         course_id = self._gen_course_id(department, course_num)
 
@@ -179,7 +179,7 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"INSERT INTO course (course_id, department, course_num, description) VALUES ({course_id}, '{department}', {course_num}, '{description}')")
+            cur.execute(f"INSERT INTO course (course_id, department, course_num, description, course_name, credit_hours) VALUES ({course_id}, '{department}', {course_num}, '{description}', '{course_name}', {credit_hours})")
             connection.commit()
 
 
@@ -217,7 +217,7 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute("SELECT professor_id FROM professor ORDER BY user_id DESC LIMIT 1")
+            cur.execute("SELECT professor_id FROM professor ORDER BY professor_id DESC LIMIT 1")
             last_professor_id = cur.fetchone()
             last_professor_id = int(last_professor_id[0])
             new_professor_id = last_professor_id + 1
