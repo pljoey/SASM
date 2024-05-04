@@ -26,7 +26,7 @@ class UserController:
         pass
 
     def view_remaining_courses(self):
-        return self.handler.view_remaining_courses()
+        return self._handler.view_remaining_courses()
     
     def add_previous_courses(self,course):
-        self.handler.add_previous_courses(course)
+        self._handler.add_previous_courses(course)
