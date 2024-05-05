@@ -121,7 +121,7 @@ class UserHandler:
         name = self.database.create_schedule(self.aUser.get_user_name())
         for cur_course in cur_schedule:
             cur_course_split = cur_course.split(" ")
-            self.database.add_section_to_schedule(self.aUser.get_user_name(), name, cur_course_split[0], cur_course_split[1], cur_course_split[2])
+            self.database.add_section_to_schedule(self.aUser.get_user_name(), name, cur_course_split[0], cur_course_split[1])
 
     def save_schedule_to_exportable_format(self):
         pass

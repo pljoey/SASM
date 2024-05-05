@@ -592,18 +592,17 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"SELECT schedule_name FROM schedule_name WHERE user_id = {user_id}")
             return cur.fetchone()
 
-    def add_section_to_schedule(self, username, schedule_name, course_dept, course_num, section_num):
+    def add_section_to_schedule(self, username, schedule_name, course_dept, course_num):
         user_id = self._get_user_id(username)
         schedule_id = self._get_schedule_id(user_id, schedule_name)
         course_id = self._gen_course_id(course_dept, course_num)
-        section_id = self._gen_section_id(course_id, section_num)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"INSERT INTO schedule_contents (schedule_id, unique_section_id) VALUES ({schedule_id}, {section_id})")
+            cur.execute(f"INSERT INTO schedule_contents (schedule_id) VALUES ({schedule_id})")
             connection.commit()
 
     def remove_section_from_schedule(self, username, schedule_name, course_dept, course_num, section_num):
