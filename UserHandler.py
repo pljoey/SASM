@@ -80,20 +80,42 @@ class UserHandler:
         if cur_sched == None:
             new_sched = Schedule.Schedule()
             self.aUser.set_current_schedule(new_sched)
+            #self.database.create_schedule(self.aUser.get_user_name())
             return True
         else:
             return False
 
     def add_course(self, course_dept, course_id)->bool:
-        if self.aUser.get_current_schedule() == None or self.database.check_for_course(course_dept, int(course_id)) == False:
+        schedule = self.aUser.get_current_schedule()
+        section_list = []
+        course_list = []
+        if schedule == None:
+            print("no schedule is loaded")
+            return False
+        elif self.database.check_for_course(course_dept, int(course_id)) == False: 
+            print("course does not exist")
             return False
         else:
             print(course_dept + course_id)
-            for Course in self.aUser.get_current_schedule().get_courses():
-                if Course.get_course_id() == (course_dept + course_id):
+            for course in schedule.get_courses():
+                if course[1].get_name() == (course_dept + course_id):
+                    print("course already in schedule")
                     return False
-            #TODO implement checks to make sure that the course can be added to the schedule
-            schedule = self.aUser.get_schedule()
+                section_list.append(course[0])
+                course_list.append(course[1])
+            #TODO I'm about to lose it
+            course_sections_list = self.database.get_sections(course_dept,course_id)
+            blacklist = self.get_blacklist(self.aUser.get_user_name())
+            for section in course_sections_list:
+                section_details = self.database.get_section_details(course_dept,course_id, section)
+                daylist = [section_details[0][2], section_details[0][3], section_details[0][4], section_details[0][5], section_details[0][6]]
+                if (section_details[1][1]+ " " + section_details[1][2]) not in blacklist[1]:
+                    for day in daylist:
+                        if day == True:
+                            return True
+    pass
+                            
+
 
 
     def remove_course(self, course_dept, course_id)->bool: 
