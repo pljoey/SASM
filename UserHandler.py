@@ -1,5 +1,5 @@
 import User
-import ExportableFormatFactory
+from ExportableFormatFactory import ExportableFormatFactory
 import Preferences
 import Schedule
 from DatabaseManagementFactory import DatabaseManagementFactory
@@ -35,8 +35,20 @@ class UserHandler:
             preferred_credit_hours = self.database.get_preferred_hours(username)
             blacklist = self.database.get_blacklist(username)
 
+            prof_blacklist = blacklist[1]
+            course_blacklist = blacklist[0]
+
             self.database.get_blacklist(username)
-            self.aUser = User.User(username, courses_taken=self.database.get_previous_courses(username))
+            self.aUser = User.User(username, courses_taken=previous_courses)
+
+            self.aUser.preferences.set_preferred_credit_hours(preferred_credit_hours)
+
+            for professor in prof_blacklist:
+                self.aUser.preferences.add_To_Blacklist(professor=professor)
+            
+            for course in course_blacklist:
+                self.aUser.preferences.add_To_Blacklist(course=course)
+
             return True
 
         return False
@@ -78,25 +90,45 @@ class UserHandler:
 
     def create_schedule(self) -> bool:
         cur_sched = self.aUser.get_current_schedule()
-        schedules = self.database.get_user_schedule_names(self.aUser.get_user_name())
-        if schedules == None and cur_sched == None:
+        if cur_sched == None:
             new_sched = Schedule.Schedule()
             self.aUser.set_current_schedule(new_sched)
-            self.database.create_schedule(self.aUser.get_user_name())
+            #self.database.create_schedule(self.aUser.get_user_name())
             return True
         else:
             return False
 
     def add_course(self, course_dept, course_id)->bool:
-        if self.aUser.get_current_schedule() == None or self.database.check_for_course(course_dept, int(course_id)) == False:
+        schedule = self.aUser.get_current_schedule()
+        section_list = []
+        course_list = []
+        if schedule == None:
+            print("no schedule is loaded")
+            return False
+        elif self.database.check_for_course(course_dept, int(course_id)) == False: 
+            print("course does not exist")
             return False
         else:
             print(course_dept + course_id)
-            for Course in self.aUser.get_current_schedule().get_courses():
-                if Course.get_course_id() == (course_dept + course_id):
+            for course in schedule.get_courses():
+                if course[1].get_name() == (course_dept + course_id):
+                    print("course already in schedule")
                     return False
-            #TODO implement checks to make sure that the course can be added to the schedule
-            schedule = self.aUser.get_schedule()
+                section_list.append(course[0])
+                course_list.append(course[1])
+            #TODO I'm about to lose it
+            course_sections_list = self.database.get_sections(course_dept,course_id)
+            blacklist = self.get_blacklist(self.aUser.get_user_name())
+            for section in course_sections_list:
+                section_details = self.database.get_section_details(course_dept,course_id, section)
+                daylist = [section_details[0][2], section_details[0][3], section_details[0][4], section_details[0][5], section_details[0][6]]
+                if (section_details[1][1]+ " " + section_details[1][2]) not in blacklist[1]:
+                    for day in daylist:
+                        if day == True:
+                            return True
+    pass
+                            
+
 
 
     def remove_course(self, course_dept, course_id)->bool: 
@@ -105,7 +137,6 @@ class UserHandler:
 
     
     def delete_schedule(self)->bool:
-        #TODO this should work once all of the data is retrieved for the user during login
         schedules = self.database.get_user_schedule_names(self.aUser.get_user_name())
         if self.aUser != None:
             self.aUser.set_current_schedule(None)
@@ -121,23 +152,42 @@ class UserHandler:
         pass
 
     def save_schedule_to_database(self):
-        pass
+        cur_schedule = self.aUser.get_current_schedule()
+        name = self.database.create_schedule(self.aUser.get_user_name())
+        for cur_course in cur_schedule:
+            cur_course_split = cur_course.split(" ")
+            self.database.add_section_to_schedule(self.aUser.get_user_name(), name, cur_course_split[0], cur_course_split[1], cur_course_split[2])
 
     def save_schedule_to_exportable_format(self):
         pass
     
     def update_password(self, username, password):
-        hashed_password = hash(password)
-        self.database.update_password(username, hashed_password)
-        courses_taken = self.database.get_previous_courses(username)
-        preferences = Preferences(self.database.get_preferred_hours(username), self.database.get_preferred_electives(username), self.database.get_blacklist(username))
-        saved_schedule = self.database #add get saved schedule function
-        return User(username, courses_taken, saved_schedule, preferences)
+        new_hash = hashlib.shake_128(password.encode())
+        hashed_password = new_hash.hexdigest(10)
+        self.database.change_password(username, hashed_password)
 
+    def fill_schedule(self):
+        pref_cred_hours = self.aUser.get_preferences().get_preferred_credit_hours()
+        cur_cred_hours = 0
+        result = []
+        prev_courses = self.database.get_previous_courses(self.aUser.get_user_name())
+        classes_remaining = self.view_remaining_courses()
+        for cur_class in classes_remaining:
+            cur_class_split = cur_class.split(" ")
+            course_prereq = self.database.get_course_prereqs(cur_class_split[0], cur_class_split[1])
+            if (course_prereq == [] or course_prereq in prev_courses):
+                result.append(cur_class)
+                cur_cred_hours += self.database.get_course_credit_hours(cur_class_split[0], cur_class_split[1])
+            if(cur_cred_hours >= pref_cred_hours):
+                break
+        self.aUser.set_current_schedule(result)
+
+    def view_schedule(self):
+        return self.aUser.get_current_schedule()
 
     def view_remaining_courses(self):
-        reqs = {"COM 223",  "ENG 249","IT 168","IT 179","IT 180","IT 191","IT 214","IT 225","IT 261","IT 279","IT 326", "IT 327","IT 328","IT 378","IT 383","IT 386","IT 398","MAT 145", "MAT 146","MAT 260"}
-        prevCourses = self.database.get_previous_courses()
+        reqs = reqs = {"COM 223",  "ENG 249","IT 168","IT 179","IT 180","IT 191","IT 214","IT 225","IT 261","IT 279","IT 326", "IT 327","IT 328","IT 378","IT 383","IT 386","IT 398","MAT 145", "MAT 146","MAT 260"}
+        prevCourses = self.database.get_previous_courses(self.aUser.get_user_name())
         result = []
         for x in reqs:
             if x not in prevCourses:

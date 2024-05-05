@@ -17,10 +17,10 @@ class UserController:
         return self._handler.delete_user(password)
     
     def export_to_format(self):
-        return self.export_to_format()
+        return self._handler.export_to_format()
     
     def update_password(self, username, password):
-        return self._handler.update_password(username, password)
+        self._handler.update_password(username, password)
     
     def add_course(self, course_dept, course_id)->bool:
         return self._handler.add_course(course_dept, course_id)
@@ -37,6 +37,12 @@ class UserController:
     def edit_schedule_name(self, name):
         pass
 
+    def fill_schedule(self):
+        return self._handler.fill_schedule()
+    
+    def view_schedule(self):
+        print(self._handler.view_schedule())
+
     def view_remaining_courses(self):
         return self._handler.view_remaining_courses()
     
@@ -48,3 +54,6 @@ class UserController:
 
     def remove_previous_course(self,course)->bool:
         return self._handler.remove_previous_course(course)
+    
+    def save_schedule(self):
+        self._handler.save_schedule_to_database()

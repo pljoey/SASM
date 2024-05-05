@@ -116,15 +116,6 @@ class MariaDBImplementation(DatabaseAbstract):
             username_db = cur.fetchone()
             return username_db != None
         
-    def update_password(self, username, password):
-        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
-
-        with connection:
-            cur = connection.cursor()
-            cur.execute("USE SASM")
-            cur.execute(f"UPDATE sasm_users SET password = " + password + "WHERE username = " + username)
-            connection.commit()
-        
     def create_user(self, username, hash_password):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
@@ -656,7 +647,7 @@ class MariaDBImplementation(DatabaseAbstract):
 
                 cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id}")
                 course_names = cur.fetchone()
-                final_course_name = course_names[0] + " " + str(course_names(1))
+                final_course_name = course_names[0] + " " + str(course_names[1])
 
                 course_section_list.append((final_course_name, section_num))
 
