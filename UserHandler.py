@@ -199,7 +199,7 @@ class UserHandler:
 
     def add_previous_courses(self,course)->bool:
         #takes a string like 'IT 326'
-        taken = self.database.get_previous_courses()
+        taken = self.database.get_previous_courses(self.aUser.get_user_name())
         c_Split = course.split()
         if self.database.check_for_course(course) and course not in taken:
             taken.append(course)
@@ -208,7 +208,7 @@ class UserHandler:
         return False
 
     def remove_previous_course(self, course)->bool: 
-        taken = self.database.get_previous_courses()
+        taken = self.database.get_previous_courses(self.aUser.get_user_name())
         c_Split = course.split()
         if self.database.check_for_course(course) and course not in taken:
             taken.remove(course)
