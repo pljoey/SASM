@@ -637,18 +637,23 @@ class MariaDBImplementation(DatabaseAbstract):
 
             course_section_list = []
 
-            for section_id in section_ids:
-                cur.execute(f"SELECT section_id FROM section WHERE unique_id = {section_id}")
-                section_num = cur.fetchone()[0]
-                
-                cur.execute(f"SELECT course_id FROM section WHERE unique_id = {section_id}")
-                course_id = cur.fetchone()[0]
+            try:
+                for section_id in section_ids:
+                    print(section_id)
+                    cur.execute(f"SELECT section_id FROM section WHERE unique_id = {section_id}")
+                    section_num = cur.fetchone()[0]
+                    
+                    cur.execute(f"SELECT course_id FROM section WHERE unique_id = {section_id}")
+                    course_id = cur.fetchone()[0]
 
-                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id}")
-                course_names = cur.fetchone()
-                final_course_name = course_names[0] + " " + str(course_names[1])
+                    cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id}")
+                    course_names = cur.fetchone()
+                    final_course_name = course_names[0] + " " + str(course_names[1])
 
-                course_section_list.append((final_course_name, section_num))
+                    course_section_list.append((final_course_name, section_num))
+            except:
+                print("An error has occured fetching saved schedule, make sure the name you put is valid. ")
+
 
             return course_section_list
             

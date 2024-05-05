@@ -127,11 +127,12 @@ class UserInterface:
             print("do you want to view or edit a schedule?")
             print("1. View schedule")
             print("2. Edit schedule")
-            print("3. Save Schedule")
-            print("4. Load Schedule")
-            print("5. Export Schedule to Text file")
-            print("6. create custom course")
-            print("7. Back")
+            print("3. Clear current schedule")
+            print("4. Save Schedule")
+            print("5. Load Schedule")
+            print("6. Export Schedule to Text file")
+            print("7. create custom course")
+            print("8. Back")
             response = input()
             match response:
                     case "1":
@@ -139,17 +140,22 @@ class UserInterface:
                     case "2":
                         self.schedule_edit_menu()
                     case "3":
-                        self.save_schedule_to_account()
+                        self.clear_schedule()
                     case "4":
-                        self.load_schedule()
+                        self.save_schedule_to_account()
                     case "5":
-                        self.export_to_format()
+                        self.load_schedule()
                     case "6":
-                        self.create_custom_course_menu()
+                        self.export_to_format()
                     case "7":
+                        self.create_custom_course_menu()
+                    case "8":
                         self.basic_menu()
                     case _:
                         print("not a valid input \n")
+
+    def clear_schedule(self):
+        self.user_controller.clear_schedule()
         
     def schedule_edit_menu(self):
         back = False

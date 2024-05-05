@@ -138,10 +138,13 @@ class UserHandler:
     def edit_schedule(self):
         pass
 
+    def clear_schedule(self):
+        self.aUser.set_current_schedule(None)
+
     def save_schedule_to_database(self):
         cur_schedule = self.aUser.get_current_schedule()
         name = self.database.create_schedule(self.aUser.get_user_name())
-        print(name)
+        print("saved under name:", name)
         for cur_course in cur_schedule:
             print(cur_course)
             cur_course_split = cur_course.split(" ")
