@@ -30,7 +30,7 @@ class User:
     def set_current_schedule(self,schedule):
         self.current_schedule = schedule
 
-    def get_preferences(self)->Preferences:
+    def get_preferences(self)->Preferences.Preferences:
         return self.preferences
     
     def set_preferences(self,preferences):

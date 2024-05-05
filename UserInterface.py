@@ -1,5 +1,6 @@
 import CourseController
 import UserController
+import ratemyprofessor
 
 class UserInterface:
     def __init__(self):
@@ -102,12 +103,18 @@ class UserInterface:
         else:
             print('Account not deleted')
 
+    def fill_schedule(self):
+        self.user_controller.fill_schedule()
+
+    def view_schedule(self):
+        self.user_controller.view_schedule()
+
     def create_schedule_menu(self):
         success = self.user_controller.create_schedule()
         if success == True:
-            print("Schedule successfully created")
+            self.fill_schedule()
         else:
-            print("Schedule already exists")
+            print("Schedule currently in use, please save or delete the schedule to create a new one")
 
     def view_schedule_menu(self):
         back = False
@@ -121,7 +128,7 @@ class UserInterface:
             response = input()
             match response:
                     case "1":
-                        print("viewing schedule")
+                        self.view_schedule()
                     case "2":
                         self.schedule_edit_menu()
                     case "3":
@@ -251,6 +258,11 @@ class UserInterface:
         print("please enter a professor's last name:")
         response = input()
         valid_prof = self.course_controller.get_professor_info(response)
+        if(valid_prof):
+            print(response)
+            print("Overall rating: " + str(ratemyprofessor.get_professor_by_school_and_name(ratemyprofessor.get_school_by_name("Illinois State University"), response).rating))
+            print("Difficulty rating: " + str(ratemyprofessor.get_professor_by_school_and_name(ratemyprofessor.get_school_by_name("Illinois State University"), response).difficulty))
+            print("Would take again: " + str(ratemyprofessor.get_professor_by_school_and_name(ratemyprofessor.get_school_by_name("Illinois State University"), response).would_take_again) + "%")
 
     def search_for_course(self):
         print("please enter a course's id:")
