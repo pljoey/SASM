@@ -82,7 +82,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur = connection.cursor()
             cur.execute("USE SASM")
             cur.execute(f"SELECT schedule_id FROM schedule_name WHERE schedule_name = '{schedule_name}' AND user_id = {user_id}")
-            return cur.fetchone()[0]
+            return cur.fetchone()
 
     def get_user_pass(self, username):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)

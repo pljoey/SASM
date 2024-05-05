@@ -59,6 +59,7 @@ class UserInterface:
         while not user_created:
             print("Please enter a username:")
             username = input()
+
             print("Please enter a password:")
             password = input()
 
