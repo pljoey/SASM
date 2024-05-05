@@ -17,7 +17,7 @@ class UserController:
         return self._handler.delete_user(password)
     
     def export_to_format(self):
-        return self.export_to_format()
+        return self._handler.export_to_format()
     
     def update_password(self, username, password):
         return self._handler.update_password(username, password)

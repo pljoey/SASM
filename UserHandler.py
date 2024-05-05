@@ -1,5 +1,5 @@
 import User
-import ExportableFormatFactory
+from ExportableFormatFactory import ExportableFormatFactory
 import Preferences
 import Schedule
 from DatabaseManagementFactory import DatabaseManagementFactory
