@@ -20,7 +20,7 @@ class UserController:
         return self.export_to_format()
     
     def update_password(self, username, password):
-        return self._handler.update_password(username, password)
+        self._handler.update_password(username, password)
     
     def add_course(self, course_dept, course_id)->bool:
         return self._handler.add_course(course_dept, course_id)
