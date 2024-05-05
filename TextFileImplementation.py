@@ -14,12 +14,12 @@ class TextFileImplementation(FormatAbstract):
 
         return TextFileImplementation._instance
 
-    #TODO: Add logic to this function, and figure out how to get the schedule object
     def export(self, schedule: Schedule):
+        text_file = open('ScheduleFile', 'w')
+
         self.schedule = schedule
 
         courses = schedule.get_courses()
 
         for course in courses:
-            print(course)
-            pass
+            text_file.write(course + '\n')
