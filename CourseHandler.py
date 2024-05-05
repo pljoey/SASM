@@ -96,5 +96,6 @@ class CourseHandler:
         custom.add_section(1, None, start_time_float, end_time_float, day_list[0],day_list[1],day_list[2],day_list[3],day_list[4])
         self.database.add_course(department, id, 'Custom Course', name, 0)
         self.database.add_section(1, "Custom", "Course", "CUS", "CUS", id, start_time_float, end_time_float, day_list[0],day_list[1],day_list[2],day_list[3],day_list[4])
+        print("Your course is CUS " + str(id))
         return True
 

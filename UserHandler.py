@@ -121,7 +121,6 @@ class UserHandler:
                             
 
     def remove_course(self, course_dept, course_id)->bool: 
-        #TODO figure out how this is supposed to work
         if (course_dept + " " + course_id) in self.aSched.get_courses():
             self.aSched.get_courses().remove(course_dept + " " + course_id)
             self.aUser.set_current_schedule(self.aSched)
@@ -132,11 +131,11 @@ class UserHandler:
     
     def delete_schedule(self)->bool:
         schedules = self.database.get_user_schedule_names(self.aUser.get_user_name())
-        if self.aUser != None:
-            self.aUser.set_current_schedule(None)
         if schedules != None:
             for schedule in schedules:
                 self.database.delete_schedule(self.aUser.get_user_name(), schedule)
+            self.aSched = None
+            self.aUser.set_current_schedule(None)
             return True
         else:
             print("No schedule exists")
