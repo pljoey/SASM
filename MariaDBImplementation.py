@@ -647,7 +647,7 @@ class MariaDBImplementation(DatabaseAbstract):
 
                 cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id}")
                 course_names = cur.fetchone()
-                final_course_name = course_names[0] + " " + str(course_names(1))
+                final_course_name = course_names[0] + " " + str(course_names[1])
 
                 course_section_list.append((final_course_name, section_num))
 
