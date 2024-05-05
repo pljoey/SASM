@@ -127,12 +127,9 @@ class UserHandler:
         pass
     
     def update_password(self, username, password):
-        hashed_password = hash(password)
-        self.database.update_password(username, hashed_password)
-        courses_taken = self.database.get_previous_courses(username)
-        preferences = Preferences(self.database.get_preferred_hours(username), self.database.get_preferred_electives(username), self.database.get_blacklist(username))
-        saved_schedule = self.database #add get saved schedule function
-        return User(username, courses_taken, saved_schedule, preferences)
+        new_hash = hashlib.shake_128(password.encode())
+        hashed_password = new_hash.hexdigest(10)
+        self.database.change_password(username, hashed_password)
 
     def fill_schedule(self):
         pref_cred_hours = self.aUser.get_preferences().get_preferred_credit_hours()

@@ -70,6 +70,9 @@ class UserInterface:
 
         print('User Created \n')
 
+    def forgot_password(self, username):
+        password = input("What is your new password? ")
+        self.user_controller.update_password(username, password)
 
     def login(self):
         logged_in = False
@@ -83,8 +86,10 @@ class UserInterface:
             logged_in = self.user_controller.login(username, password)
 
             if not logged_in:
-                print("Incorrect username or password please try again. \n") 
-
+                print("Incorrect username or password, press 1) to try again or 2) forgot password \n") 
+                choice = input()
+                if (choice == "2"):
+                    self.forgot_password(username)
         
         self.basic_menu()
 
