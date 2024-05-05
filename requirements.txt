@@ -1,4 +1,3 @@
 #For interfacing with the database
 pymysql
-pytest
-RateMyProfessorApi
+hashlib
