@@ -190,23 +190,27 @@ class UserHandler:
         return result
     
     def view_prior_courses(self):
-        return self.database.get_previous_courses()
+        return self.database.get_previous_courses(self.aUser.get_user_name())
 
     def add_previous_courses(self,course)->bool:
         #takes a string like 'IT 326'
         taken = self.database.get_previous_courses(self.aUser.get_user_name())
         c_Split = course.split()
-        if self.database.check_for_course(course) and course not in taken:
+        dep = c_Split.pop(0)
+        num = c_Split.pop(0)
+        if self.database.check_for_course(dep,num) and course not in taken:
             taken.append(course)
-            self.database.add_to_previous_courses(self.aUser.get_user_name(),c_Split.pop(0),c_Split.pop(0))
+            self.database.add_to_previous_courses(self.aUser.get_user_name(),dep,num)
             return True
         return False
 
     def remove_previous_course(self, course)->bool: 
         taken = self.database.get_previous_courses(self.aUser.get_user_name())
         c_Split = course.split()
-        if self.database.check_for_course(course) and course not in taken:
+        dep = c_Split.pop(0)
+        num = c_Split.pop(0)
+        if self.database.check_for_course(dep,num) and course in taken:
             taken.remove(course)
-            self.database.remove_from_previous_courses(self.aUser.get_user_name(),c_Split.pop(0),c_Split.pop(0))
+            self.database.remove_from_previous_courses(self.aUser.get_user_name(),dep,num)
             return True
         return False 

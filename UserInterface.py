@@ -210,30 +210,45 @@ class UserInterface:
                 print()
                 y = 0   
 
+    def view_prior_courses(self):
+        print("Your prior courses: ")
+        list = self.user_controller.view_prior_courses()
+        y = 0
+        for x in list:
+            print(x," ", end='')
+            y = y + 1
+            if y == 3:
+                print()
+                y = 0   
+        print()
+
     def account_menu(self):
         back = False
         while not back:
-            print("do you want to view course or professor information?")
+            print("Do you want to view course or professor information?")
             print("1. View account information")
-            print("2. edit prior courses")
-            print("3. edit preferences")
-            print("4. Delete Account")
-            print("5. Change Password")
-            print("6. back")
+            print("2. View prior courses")
+            print("3. edit prior courses")
+            print("4. edit preferences")
+            print("5. Delete Account")
+            print("6. Change Password")
+            print("7. back")
             response = input()
             match response:
                 case "1":
                     self.view_account()
                 case "2":
-                    self.edit_prior_courses()
+                    self.view_prior_courses()
                 case "3":
-                    self.course_controller.edit_preferences()
+                    self.edit_prior_courses()
                 case "4":
+                    self.course_controller.edit_preferences()
+                case "5":
                     #TODO: Fix going between start_menu and basic_menu
                     self.delete_user()
-                case "5":
-                    self.forgot_password()
                 case "6":
+                    self.forgot_password()
+                case "7":
                     self.basic_menu()
                     back = True
                 case _:
