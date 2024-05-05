@@ -276,9 +276,6 @@ class UserInterface:
         days = input()
         self.course_controller.add_custom_course(name,start_time,end_time,days)
 
-    def get_course_review(self):
-        pass
-
     def save_schedule_to_account(self):
         pass
 
