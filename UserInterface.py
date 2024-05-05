@@ -60,6 +60,7 @@ class UserInterface:
         while not user_created:
             print("Please enter a username:")
             username = input()
+
             print("Please enter a password:")
             password = input()
 
@@ -217,7 +218,8 @@ class UserInterface:
             print("2. edit prior courses")
             print("3. edit preferences")
             print("4. Delete Account")
-            print("5. back")
+            print("5. Change Password")
+            print("6. back")
             response = input()
             match response:
                 case "1":
@@ -230,6 +232,8 @@ class UserInterface:
                     #TODO: Fix going between start_menu and basic_menu
                     self.delete_user()
                 case "5":
+                    self.forgot_password()
+                case "6":
                     self.basic_menu()
                     back = True
                 case _:
