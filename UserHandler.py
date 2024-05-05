@@ -46,6 +46,7 @@ class UserHandler:
         ## If someone logs out it will update the user's preferences, courses taken, and schedule
         self.aUser = None
         self.aSched = None
+        return (True)
 
     def export_to_format(self):
         text_export = ExportableFormatFactory.get_format_instance_type('text')
@@ -142,6 +143,9 @@ class UserHandler:
             if x not in prevCourses:
                 result.append(x)
         return result
+    
+    def view_prior_courses(self):
+        return self.database.get_previous_courses()
 
     def add_previous_courses(self,course)->bool:
         #takes a string like 'IT 326'

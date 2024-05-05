@@ -40,6 +40,9 @@ class UserController:
     def view_remaining_courses(self):
         return self._handler.view_remaining_courses()
     
+    def view_prior_courses(self):
+        return self._handler.view_prior_courses()
+
     def add_previous_courses(self,course)->bool:
         return self._handler.add_previous_courses(course)
 
