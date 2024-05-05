@@ -1,5 +1,5 @@
 import User
-import ExportableFormatFactory
+from ExportableFormatFactory import ExportableFormatFactory
 import Preferences
 from Schedule import Schedule
 from DatabaseManagementFactory import DatabaseManagementFactory
@@ -35,8 +35,20 @@ class UserHandler:
             preferred_credit_hours = self.database.get_preferred_hours(username)
             blacklist = self.database.get_blacklist(username)
 
+            prof_blacklist = blacklist[1]
+            course_blacklist = blacklist[0]
+
             self.database.get_blacklist(username)
-            self.aUser = User.User(username, courses_taken=self.database.get_previous_courses(username))
+            self.aUser = User.User(username, courses_taken=previous_courses)
+
+            self.aUser.preferences.set_preferred_credit_hours(preferred_credit_hours)
+
+            for professor in prof_blacklist:
+                self.aUser.preferences.add_To_Blacklist(professor=professor)
+            
+            for course in course_blacklist:
+                self.aUser.preferences.add_To_Blacklist(course=course)
+
             return True
 
         return False
@@ -46,6 +58,7 @@ class UserHandler:
         ## If someone logs out it will update the user's preferences, courses taken, and schedule
         self.aUser = None
         self.aSched = None
+        return (True)
 
     def export_to_format(self):
         text_export = ExportableFormatFactory.get_format_instance_type('text')
@@ -88,12 +101,12 @@ class UserHandler:
 
     def add_course(self, course_dept, course_id)->bool:
         schedule = self.aSched
-
         if schedule == None:
             print("no schedule is loaded")
             return False
         elif self.database.check_for_course(course_dept, int(course_id)) == False: 
             print("course does not exist")
+
             return False
         elif (course_dept + " " + course_id) in (schedule.get_courses()):
             print("course already in schedule")
@@ -175,6 +188,9 @@ class UserHandler:
             if x not in prevCourses:
                 result.append(x)
         return result
+    
+    def view_prior_courses(self):
+        return self.database.get_previous_courses()
 
     def add_previous_courses(self,course)->bool:
         #takes a string like 'IT 326'

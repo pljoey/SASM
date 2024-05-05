@@ -3,6 +3,7 @@ class Schedule:
     #constructor for schedule
     def __init__ (self, name = "",courses = [], tch = 0):
         self.name = name
+        #courses in form [(section_num, Course)]
         self.courses = courses
         self.total_credit_hours = tch
         

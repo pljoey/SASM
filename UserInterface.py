@@ -60,6 +60,7 @@ class UserInterface:
         while not user_created:
             print("Please enter a username:")
             username = input()
+
             print("Please enter a password:")
             password = input()
 
@@ -191,20 +192,23 @@ class UserInterface:
                 case "2":
                     self.search_for_professor()
                 case "3":
-                    print("Here are the remaining core courses for your major: ")
-                    list = self.user_controller.view_remaining_courses()
-                    y = 0
-                    for x in list:
-                        print(x," ", end='')
-                        y = y + 1
-                        if y == 3:
-                            print()
-                            y = 0                
+                    self.view_remaining_courses()             
                 case "4":
                     self.basic_menu()
                     back = True
                 case _:
                     print("not a valid input \n")
+
+    def view_remaining_courses(self):
+        print("Here are the remaining core courses for your major: ")
+        list = self.user_controller.view_remaining_courses()
+        y = 0
+        for x in list:
+            print(x," ", end='')
+            y = y + 1
+            if y == 3:
+                print()
+                y = 0   
 
     def account_menu(self):
         back = False
@@ -214,18 +218,34 @@ class UserInterface:
             print("2. edit prior courses")
             print("3. edit preferences")
             print("4. Delete Account")
-            print("5. back")
+            print("5. Change Password")
+            print("6. back")
             response = input()
             match response:
                 case "1":
                     self.view_account()
                 case "2":
-                    print("1. Add prior courses")
-                    print("2. Remove prior courses")
-                    print("3. Back")
-                    response = input()
-                    match response:
-                        case "1":
+                    self.edit_prior_courses()
+                case "3":
+                    self.course_controller.edit_preferences()
+                case "4":
+                    #TODO: Fix going between start_menu and basic_menu
+                    self.delete_user()
+                case "5":
+                    self.forgot_password()
+                case "6":
+                    self.basic_menu()
+                    back = True
+                case _:
+                    print("not a valid input \n")
+
+    def edit_prior_courses(self):
+        print("1. Add prior courses")
+        print("2. Remove prior courses")
+        print("3. Back")
+        response = input()
+        match response:
+            case "1":
                             cont = "y"
                             while cont ==  "y":
                                 print("Enter the name of a course: ")
@@ -237,7 +257,7 @@ class UserInterface:
                                 else:
                                     print("Course not added, try more (y/n): ")
                                     cont = input()
-                        case "2":
+            case "2":
                             cont = "y"
                             while cont ==  "y":
                                 print("Enter the name of a course: ")
@@ -249,21 +269,11 @@ class UserInterface:
                                 else:
                                     print("Course not removed, remove more (y/n): ")
                                     cont = input()
-                        case "3":
+            case "3":
                             self.basic_menu()
                             back = True
-                        case _:
+            case _:
                             print("not a valid input \n")
-                case "3":
-                    self.course_controller.edit_preferences()
-                case "4":
-                    #TODO: Fix going between start_menu and basic_menu
-                    self.delete_user()
-                case "5":
-                    self.basic_menu()
-                    back = True
-                case _:
-                    print("not a valid input \n")
 
     def search_for_professor(self):
         print("please enter a professor's last name:")
