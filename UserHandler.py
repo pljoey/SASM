@@ -131,12 +131,27 @@ class UserHandler:
         return User(username, courses_taken, saved_schedule, preferences)
 
     def fill_schedule(self):
+        pref_cred_hours = self.aUser.get_preferences().get_preferred_credit_hours()
+        cur_cred_hours = 0
+        result = []
+        prev_courses = self.database.get_previous_courses(self.aUser.get_user_name())
         classes_remaining = self.view_remaining_courses()
-        print(self.database.get_course_description(classes_remaining[0]))
+        for cur_class in classes_remaining:
+            cur_class_split = cur_class.split(" ")
+            course_prereq = self.database.get_course_prereqs(cur_class_split[0], cur_class_split[1])
+            if (course_prereq == [] or course_prereq in prev_courses):
+                result.append(cur_class)
+                cur_cred_hours += self.database.get_course_credit_hours(cur_class_split[0], cur_class_split[1])
+            if(cur_cred_hours >= pref_cred_hours):
+                break
+        self.aUser.set_current_schedule(result)
+
+    def view_schedule(self):
+        return self.aUser.get_current_schedule()
 
     def view_remaining_courses(self):
         reqs = reqs = {"COM 223",  "ENG 249","IT 168","IT 179","IT 180","IT 191","IT 214","IT 225","IT 261","IT 279","IT 326", "IT 327","IT 328","IT 378","IT 383","IT 386","IT 398","MAT 145", "MAT 146","MAT 260"}
-        prevCourses = self.database.get_previous_courses()
+        prevCourses = self.database.get_previous_courses(self.aUser.get_user_name())
         result = []
         for x in reqs:
             if x not in prevCourses:

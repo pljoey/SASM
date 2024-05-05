@@ -39,6 +39,9 @@ class UserController:
 
     def fill_schedule(self):
         return self._handler.fill_schedule()
+    
+    def view_schedule(self):
+        print(self._handler.view_schedule())
 
     def view_remaining_courses(self):
         return self._handler.view_remaining_courses()
