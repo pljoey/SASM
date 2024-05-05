@@ -45,3 +45,6 @@ class UserController:
 
     def remove_previous_course(self,course)->bool:
         return self._handler.remove_previous_course(course)
+    
+    def save_schedule(self):
+        self._handler.save_schedule_to_database()
