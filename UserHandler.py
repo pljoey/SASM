@@ -75,11 +75,9 @@ class UserHandler:
 
     def create_schedule(self) -> bool:
         cur_sched = self.aUser.get_current_schedule()
-        schedules = self.database.get_user_schedule_names(self.aUser.get_user_name())
-        if schedules == None and cur_sched == None:
+        if cur_sched == None:
             new_sched = Schedule.Schedule()
             self.aUser.set_current_schedule(new_sched)
-            self.database.create_schedule(self.aUser.get_user_name())
             return True
         else:
             return False
@@ -102,7 +100,6 @@ class UserHandler:
 
     
     def delete_schedule(self)->bool:
-        #TODO this should work once all of the data is retrieved for the user during login
         schedules = self.database.get_user_schedule_names(self.aUser.get_user_name())
         if self.aUser != None:
             self.aUser.set_current_schedule(None)
