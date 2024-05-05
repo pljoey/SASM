@@ -306,7 +306,8 @@ class UserInterface:
         self.user_controller.save_schedule()
 
     def load_schedule(self):
-        pass
+        name = input("What schedule would you like to load? ")
+        self.user_controller.load_schedule(name)
 
     def edit_prefences(self):
         pass
