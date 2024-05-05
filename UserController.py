@@ -17,7 +17,7 @@ class UserController:
         return self._handler.delete_user(password)
     
     def export_to_format(self):
-        return self.export_to_format()
+        return self._handler.export_to_format()
     
     def update_password(self, username, password):
         self._handler.update_password(username, password)
@@ -46,6 +46,9 @@ class UserController:
     def view_remaining_courses(self):
         return self._handler.view_remaining_courses()
     
+    def view_prior_courses(self):
+        return self._handler.view_prior_courses()
+
     def add_previous_courses(self,course)->bool:
         return self._handler.add_previous_courses(course)
 
