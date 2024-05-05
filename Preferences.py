@@ -3,7 +3,7 @@ import Blacklist
 #methods and attributes for the preferences class
 class Preferences:
     #constructor for Preferences class
-    def __init__(self, preferred_credit_hours = 15, preferred_electives = [], local_blacklist = Blacklist.Blacklist()):
+    def __init__(self, preferred_credit_hours = -1, preferred_electives = [], local_blacklist = Blacklist.Blacklist()):
         self.preferred_credit_hours = preferred_credit_hours
         self.preferred_electives = preferred_electives
         self.local_blacklist = local_blacklist
