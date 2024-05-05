@@ -151,8 +151,8 @@ class UserHandler:
         return self.aUser.get_current_schedule()
 
     def view_remaining_courses(self):
-        reqs = {"COM 223",  "ENG 249","IT 168","IT 179","IT 180","IT 191","IT 214","IT 225","IT 261","IT 279","IT 326", "IT 327","IT 328","IT 378","IT 383","IT 386","IT 398","MAT 145", "MAT 146","MAT 260"}
-        prevCourses = self.database.get_previous_courses()
+        reqs = reqs = {"COM 223",  "ENG 249","IT 168","IT 179","IT 180","IT 191","IT 214","IT 225","IT 261","IT 279","IT 326", "IT 327","IT 328","IT 378","IT 383","IT 386","IT 398","MAT 145", "MAT 146","MAT 260"}
+        prevCourses = self.database.get_previous_courses(self.aUser.get_user_name())
         result = []
         for x in reqs:
             if x not in prevCourses:
