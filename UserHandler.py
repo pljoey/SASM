@@ -35,8 +35,20 @@ class UserHandler:
             preferred_credit_hours = self.database.get_preferred_hours(username)
             blacklist = self.database.get_blacklist(username)
 
+            prof_blacklist = blacklist[1]
+            course_blacklist = blacklist[0]
+
             self.database.get_blacklist(username)
-            self.aUser = User.User(username, courses_taken=self.database.get_previous_courses(username))
+            self.aUser = User.User(username, courses_taken=previous_courses)
+
+            self.aUser.preferences.set_preferred_credit_hours(preferred_credit_hours)
+
+            for professor in prof_blacklist:
+                self.aUser.preferences.add_To_Blacklist(professor=professor)
+            
+            for course in course_blacklist:
+                self.aUser.preferences.add_To_Blacklist(course=course)
+
             return True
 
         return False
