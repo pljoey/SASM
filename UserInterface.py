@@ -317,14 +317,14 @@ class UserInterface:
         dept = input()
         print("please enter a course's id number:")
         id = input()
-        print(self.user_controller.add_course(dept, id))
+        self.user_controller.add_course(dept, id)
 
     def remove_course_menu(self):
         print("please enter a course's department:")
         dept = input()
         print("please enter a course's id number:")
         id = input()
-        print(self.user_controller.remove_course(dept, id))
+        self.user_controller.remove_course(dept, id)
 
     def create_custom_course_menu(self):
         print("please enter a name for the course")
