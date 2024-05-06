@@ -2,6 +2,7 @@ import User
 from ExportableFormatFactory import ExportableFormatFactory
 import Preferences
 from Schedule import Schedule
+from Course import Course
 from DatabaseManagementFactory import DatabaseManagementFactory
 import hashlib
 
@@ -186,7 +187,7 @@ class UserHandler:
 
     def view_schedule(self):
         try:
-            return self.aUser.get_current_schedule()
+            return self.aUser.get_current_schedule().get_courses()
         except:
             return "No current schedule selected"
 
