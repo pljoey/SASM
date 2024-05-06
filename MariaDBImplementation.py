@@ -632,8 +632,10 @@ class MariaDBImplementation(DatabaseAbstract):
 
     def get_sections_from_schedule(self, username, schedule_name):
         user_id = self._get_user_id(username)
-        schedule_id = self._get_schedule_id(user_id, schedule_name)
-
+        try:
+            schedule_id = self._get_schedule_id(user_id, schedule_name)
+        except:
+            return "Incorrect schedule name"
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
         with connection:
