@@ -1,10 +1,11 @@
-import unittest
+import pytest
 
-from SASM.User import User
-from SASM.UserHandler import UserHandler
+from User import User
+from UserHandler import UserHandler
 
-class UserControllerTest(unittest.TestCase):
-    def view_schedule_test(self):
-        user = User("test", ["IT 168"])
-        handler = UserHandler()
-        handler.view_schedule()
+@pytest.fixture(scope="class")
+def view_schedule_test(self):
+    handler = UserHandler()
+    handler.aUser = User("test")
+    handler.aUser.set_current_schedule = ["IT 168"]
+    assert handler.view_schedule == ["IT 168"]

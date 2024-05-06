@@ -14,14 +14,18 @@ class Blacklist:
     def set_blacklist(self, blacklist):
         self.blacklist = blacklist
 
-    def add_To_Blacklist(self, course): 
-        self.blacklist.append(course)
+    def add_to_course_to_blacklist(self, id, dept):
+        name = dept, " ", id 
+        self.blacklist.append(name.upper())
 
-    def add_To_Blacklist(self, professor):
-        self.blacklist.append(professor)
+    def add_professor_to_blacklist(self, first, last):
+        name = first, " ", last
+        self.blacklist.append(name.upper())
 
-    def remove_From_Blacklist(self, course):
-        self.blacklist.remove(course)
+    def remove_course_from_blacklist(self, id, dept):
+        name = dept, " ", id
+        self.blacklist.remove(name.upper())
 
-    def remove_From_Blacklist(self, professor):
-        self.blacklist.remove(professor)
+    def remove_professor_from_blacklist(self, first, last):
+        name = first, " ", last
+        self.blacklist.remove(name.upper())
