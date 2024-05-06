@@ -386,17 +386,39 @@ class UserInterface:
             response = input()
             match response:
                 case "1":
-                    pass
+                    self.set_credit_hours()
                 case "2":
-                    pass
+                    self.set_prefered_electives()
                 case "3":
                     self.edit_blacklist()
                 case "4":
                     back = True
                 case _:
                     print("not valid input \n")
-        
 
+    def set_prefered_electives(self):
+        stop = False
+        while not stop:
+         print("Enter Course Name")
+         name = input()
+         self.user_controller._handler.aUser.preferences.add_preferred_elective(name)
+         print("continu?  Y/N")
+         response = input()
+         match response:
+                case "N":
+                    stop = True
+                case _:
+                    stop = False
+
+
+    def set_credit_hours(self):
+        print("Enter Number Of hours")
+        response = input()
+        if response < 1:
+            print("invalid")
+        else:
+            self.user_controller._handler.aUser.preferences.set_preferred_credit_hours(response)
+        
     def edit_blacklist(self):
         back = False
         while not back:
