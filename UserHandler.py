@@ -2,6 +2,7 @@ import User
 from ExportableFormatFactory import ExportableFormatFactory
 import Preferences
 from Schedule import Schedule
+from Course import Course
 from DatabaseManagementFactory import DatabaseManagementFactory
 import hashlib
 
@@ -170,13 +171,15 @@ class UserHandler:
     def fill_schedule(self):
         pref_cred_hours = self.aUser.get_preferences().get_preferred_credit_hours()
         cur_cred_hours = 0
+        blacklisted = self.aUser.get_preferences().get_local_blacklist()
         result = []
         prev_courses = self.database.get_previous_courses(self.aUser.get_user_name())
+        print(prev_courses)
         classes_remaining = self.view_remaining_courses()
         for cur_class in classes_remaining:
             cur_class_split = cur_class.split(" ")
             course_prereq = self.database.get_course_prereqs(cur_class_split[0], cur_class_split[1])
-            if (course_prereq == [] or course_prereq in prev_courses):
+            if (course_prereq == [] or course_prereq[0] in prev_courses):
                 result.append(cur_class)
                 cur_cred_hours += self.database.get_course_credit_hours(cur_class_split[0], cur_class_split[1])
             if(cur_cred_hours >= pref_cred_hours):
@@ -186,7 +189,7 @@ class UserHandler:
 
     def view_schedule(self):
         try:
-            return self.aUser.get_current_schedule()
+            return self.aUser.get_current_schedule().get_courses()
         except:
             return "No current schedule selected"
 
@@ -226,7 +229,7 @@ class UserHandler:
         return False 
     
     def add_course_to_blacklist(self, course_id, course_dept):
-        self.database.add_course_to_blacklist(self.aUser.get_user_name(), course_dept,course_id)
+        self.database.add_course_to_blacklist(self.aUser.get_user_name(), course_dept, course_id)
     
     def add_professor_to_blacklist(self, professor_first, professor_last, professor_dept):
         self.database.add_professor_to_blacklist(self.aUser.get_user_name(), professor_first, professor_last, professor_dept)
