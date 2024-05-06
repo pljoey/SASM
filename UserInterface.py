@@ -214,7 +214,8 @@ class UserInterface:
             y = y + 1
             if y == 3:
                 print()
-                y = 0   
+                y = 0  
+        print() 
 
     def view_prior_courses(self):
         print("Your prior courses: ")
@@ -261,18 +262,30 @@ class UserInterface:
                     print("not a valid input \n")
 
     def view_blacklist(self):
-        print("Here is your blacklist: ")
+        print("Here is your course blacklist: ")
         list = self.user_controller.view_blacklist()
-        print(list)
-        # y = 0
-        # for x in list:
-        #     print(x," ", end='')
-        #     y = y + 1
-        #     if y == 3:
-        #         print()
-        #         y = 0   
+        list1 = list[0]
+        list2 = list[1]
+        y = 0
+        for x in list1:
+            print(x," ", end='')
+            y = y + 1
+            if y == 3:
+                print()
+                y = 0   
+        print("Here is your professor blacklist: ")
+        y = 0
+        for x in list2:
+            print(x," ", end='')
+            y = y + 1
+            if y == 3:
+                print()
+                y = 0   
+        print()
+
 
     def edit_prior_courses(self):
+        print("How would you like to edit: ")
         print("1. Add prior courses")
         print("2. Remove prior courses")
         print("3. Back")
