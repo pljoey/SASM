@@ -115,7 +115,9 @@ class UserHandler:
                             
 
     def remove_course(self, course_dept, course_id)->bool: 
-        if (course_dept + " " + course_id) in self.aSched.get_courses():
+        if(self.aSched == None):
+            return False
+        elif (course_dept + " " + course_id) in self.aSched.get_courses():
             self.aSched.get_courses().remove(course_dept + " " + course_id)
             self.aUser.set_current_schedule(self.aSched)
             return True
