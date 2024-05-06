@@ -35,7 +35,7 @@ class UserController:
         return self._handler.delete_schedule()
     
     def edit_schedule_name(self, name):
-        pass
+        self._handler.edit_schedule_name(name)
 
     def view_remaining_courses(self):
         return self._handler.view_remaining_courses()
@@ -45,3 +45,10 @@ class UserController:
 
     def remove_previous_course(self,course)->bool:
         return self._handler.remove_previous_course(course)
+    
+    def is_blacklist_empty(self):
+        if self._handler.aUser.preferences.local_blacklist.blacklist.count < 0:
+            return False
+        return True
+
+        

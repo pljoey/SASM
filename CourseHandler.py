@@ -88,4 +88,4 @@ class CourseHandler:
         self.database.add_course(department, id, name)
         self.database.add_section(1, "Custom", "Course", "CUS", "CUS", id, start_time_float, end_time_float, day_list[0],day_list[1],day_list[2],day_list[3],day_list[4])
         return True
-
+    

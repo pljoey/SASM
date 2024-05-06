@@ -28,6 +28,7 @@ class Schedule:
 
     def set_schdeule_name(self, name):
         self.schedule_type = name
+        
     def get_total_credit_hours(self)->int:
         return self.total_credit_hours
 

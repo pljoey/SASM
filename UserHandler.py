@@ -119,6 +119,9 @@ class UserHandler:
     def edit_schedule(self):
         pass
 
+    def edit_schedule_name(self, name):
+        self.aUser.get_current_schedule().set_schdeule_name(name)
+
     def save_schedule_to_database(self):
         pass
 
@@ -161,3 +164,19 @@ class UserHandler:
             self.database.remove_from_previous_courses(self.aUser.get_user_name(),c_Split.pop(0),c_Split.pop(0))
             return True
         return False 
+    
+    def add_course_to_blacklist(self, course_id, course_dept):
+        self.aUser.preferences.local_blacklist.add_to_course_to_blacklist(course_id, course_dept)
+        self.database.add_course_to_blacklist(self.aUser.get_user_name(), course_id, course_dept)
+    
+    def add_professor_to_blacklist(self, professor_first, professor_last, professor_dept):
+        self.aUser.preferences.local_blacklist.add_professor_to_blacklist(professor_first, professor_last)
+        self.database.add_professor_to_blacklist(self.aUser.get_user_name(), professor_first, professor_last, professor_dept)
+    
+    def remove_course_from_blacklist(self, course_id, course_dept):
+        self.aUser.preferences.local_blacklist.remove_course_from_blacklist(course_id, course_dept)
+        self.database.remove_course_from_blacklist(self.aUser.get_user_name(), course_id, course_dept)
+
+    def remove_professor_from_blacklist(self, professor_first, professor_last, professor_dept):
+        self.aUser.preferences.local_blacklist.remove_professor_from_blacklist(professor_first, professor_last)
+        self.database.remove_professor_from_blacklist(self.aUser.get_user_name(), professor_first, professor_last, professor_dept)
