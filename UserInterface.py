@@ -216,6 +216,7 @@ class UserInterface:
                 print()
                 y = 0  
         print() 
+  
 
     def view_prior_courses(self):
         print("Your prior courses: ")
@@ -370,6 +371,7 @@ class UserInterface:
         self.user_controller.save_schedule()
 
     def load_schedule(self):
+        self.user_controller.get_schedule_names()
         name = input("What schedule would you like to load? ")
         self.user_controller.load_schedule(name)
 

@@ -71,3 +71,32 @@ def test_remove_course_when_in_schedule():
     handler.aUser = User("test_guy",[], handler.aSched)
     result = handler.remove_course("IT", "168")
     assert result == True
+
+def test_create_new_user_and_login():
+    handler = UserHandler()
+    handler.create_user('testing_user', 'test_pass')
+    login_result = handler.login('testing_user', 'test_pass')
+    handler.delete_user('test_pass')
+    assert login_result == True
+    
+def test_create_new_user_with_reused_user():
+    handler = UserHandler()
+    handler.create_user('testing_user', 'test_pass')
+    result = handler.create_user('testing_user', 'test_pass')
+    handler.login('testing_user', 'test_pass')
+    handler.delete_user('test_pass')
+    assert result == False
+
+def test_login_with_wrong_pass():
+    handler = UserHandler()
+    handler.create_user('testing_user', 'test_pass')
+    login_result = handler.login('testing_user', 'test_pass')
+    handler.delete_user('test_pass')
+    assert login_result == False
+
+def test_logout():
+    handler = UserHandler()
+    handler.create_user('testing_user', 'test_pass')
+    handler.login('testing_user', 'test_pass')
+    logout_result = handler.logout()
+    assert logout_result == False
