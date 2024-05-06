@@ -165,7 +165,9 @@ class UserHandler:
         for course in sched:
             build_new_schedule.append(course[0])
         print(build_new_schedule)
-        self.aUser.set_current_schedule(build_new_schedule) 
+        new_sched = Schedule()
+        new_sched.set_courses(build_new_schedule)
+        self.aUser.set_current_schedule(new_sched)
 
     def save_schedule_to_exportable_format(self):
         pass
