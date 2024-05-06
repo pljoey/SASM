@@ -5,7 +5,7 @@ class Preferences:
     #constructor for Preferences class
     def __init__(self, preferred_credit_hours = 15, preferred_electives = [], local_blacklist = Blacklist.Blacklist()):
         self.preferred_credit_hours = preferred_credit_hours
-        self.preferred_electives = preferred_electives
+        self.preferred_electives = []
         self.local_blacklist = local_blacklist
     
     #getters and setters for the above attributes
@@ -26,3 +26,6 @@ class Preferences:
     
     def set_local_blacklist(self,blacklist):
         self.local_blacklist = blacklist   
+    
+    def add_preferred_elective(self, elective):
+        self.preferred_electives.append(elective)
