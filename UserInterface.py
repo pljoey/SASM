@@ -410,10 +410,13 @@ class UserInterface:
         stop = False
         while not stop:
             print("Enter Course Department (Ex: IT, MAT, etc.)")
-            id = input()
-            print("Enter ID Number (Ex: 180, 227, etc.)")
             dept = input()
-            self.user_controller._handler.add_course_to_blacklist(id.strip(), dept.strip())
+            dept = dept.strip()
+            dept = dept.upper()
+            print("Enter ID Number (Ex: 180, 227, etc.)")
+            id = input()
+            id.strip()
+            self.user_controller._handler.add_course_to_blacklist(id, dept)
             print("Add more?")
             print("Y/N")
             response = input()
@@ -452,8 +455,11 @@ class UserInterface:
         while not stop:
                 print("Enter Course Department (Ex: IT, MAT, etc.)")
                 dept = input()
+                dept = dept.strip()
+                dept = dept.upper()
                 print("Enter ID Number (Ex: 180, 227, etc.)")
                 id = input()
+                id.strip()
                 self.user_controller._handler.remove_course_from_blacklist(id, dept)
                 print("Remove more?")
                 print("Y")
@@ -471,11 +477,12 @@ class UserInterface:
     def remove_professor_from_blacklist(self):
         stop = False
         while not stop:
-
                 print("Enter First Name")
                 first = input()
+                first = first.strip()
                 print("Enter Last Name")
                 last = input()
+                last = last.strip()
                 self.user_controller._handler.add_professor_to_blacklist(first, last)
                 print("Add more?")
                 print("Y")
