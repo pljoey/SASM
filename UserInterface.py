@@ -231,24 +231,24 @@ class UserInterface:
     def account_menu(self):
         back = False
         while not back:
-            print("Do you want to view course or professor information?")
-            print("1. View account information")
+            print("What do you want to view?")
+            print("1. View Blacklist")
             print("2. View prior courses")
-            print("3. edit prior courses")
-            print("4. edit preferences")
+            print("3. Edit prior courses")
+            print("4. Edit preferences")
             print("5. Delete Account")
             print("6. Change Password")
             print("7. back")
             response = input()
             match response:
                 case "1":
-                    self.view_account()
+                    self.view_blacklist()
                 case "2":
                     self.view_prior_courses()
                 case "3":
                     self.edit_prior_courses()
                 case "4":
-                    self.course_controller.edit_preferences()
+                    self.edit_prefences()
                 case "5":
                     #TODO: Fix going between start_menu and basic_menu
                     self.delete_user()
@@ -259,6 +259,18 @@ class UserInterface:
                     back = True
                 case _:
                     print("not a valid input \n")
+
+    def view_blacklist(self):
+        print("Here is your blacklist: ")
+        list = self.user_controller.view_blacklist()
+        print(list)
+        # y = 0
+        # for x in list:
+        #     print(x," ", end='')
+        #     y = y + 1
+        #     if y == 3:
+        #         print()
+        #         y = 0   
 
     def edit_prior_courses(self):
         print("1. Add prior courses")
@@ -352,7 +364,7 @@ class UserInterface:
         back = False
         while not back:
             print("What would you like to edit?")
-            print("1. Credit Houres")
+            print("1. Credit Hours")
             print("2. Prefered Electives")
             print("3. Blacklist")
             print("4. Back")
@@ -398,13 +410,12 @@ class UserInterface:
         stop = False
         while not stop:
             print("Enter Course Department (Ex: IT, MAT, etc.)")
-            dept = input()
-            print("Enter ID Number (Ex: 180, 227, etc.)")
             id = input()
-            self.user_controller._handler.add_course_to_blacklist(id, dept)
+            print("Enter ID Number (Ex: 180, 227, etc.)")
+            dept = input()
+            self.user_controller._handler.add_course_to_blacklist(id.strip(), dept.strip())
             print("Add more?")
-            print("Y")
-            print("N")
+            print("Y/N")
             response = input()
             match response:
                 case "Y":
@@ -439,14 +450,11 @@ class UserInterface:
     def remove_course_from_blacklist(self):
         stop = False
         while not stop:
-            if self.user_controller.is_blacklist_empty():
-                stop = True
-            else:
                 print("Enter Course Department (Ex: IT, MAT, etc.)")
                 dept = input()
                 print("Enter ID Number (Ex: 180, 227, etc.)")
                 id = input()
-                self.user_controller._handler.remove_course_to_blacklist(id, dept)
+                self.user_controller._handler.remove_course_from_blacklist(id, dept)
                 print("Remove more?")
                 print("Y")
                 print("N")
@@ -463,9 +471,7 @@ class UserInterface:
     def remove_professor_from_blacklist(self):
         stop = False
         while not stop:
-            if self.user_controller.is_blacklist_empty():
-                stop = True
-            else:
+
                 print("Enter First Name")
                 first = input()
                 print("Enter Last Name")
