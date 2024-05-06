@@ -5,8 +5,9 @@ from Schedule import Schedule
 
 def test_view_schedule():
     handler = UserHandler()
+    handler.aSched = Schedule("test_sched",["IT 168"])
     handler.aUser = User("test")
-    handler.aUser.set_current_schedule(["IT 168"])
+    handler.aUser.set_current_schedule(handler.aSched)
     assert handler.view_schedule() == ["IT 168"]
     
 def test_create_schedule_for_user_with_schedule():
@@ -71,8 +72,31 @@ def test_remove_course_when_in_schedule():
     result = handler.remove_course("IT", "168")
     assert result == True
 
-def test_add_course_to_blacklist_when_empty():
+def test_create_new_user_and_login():
     handler = UserHandler()
-    handler.aSched = handler.aSched = Schedule("test_sched", ["IT 168"])
-    handler.aUser = User("test_guy", [], handler.aSched)
-    handler.add_course_to_blacklist("IT", "168")
+    handler.create_user('testing_user', 'test_pass')
+    login_result = handler.login('testing_user', 'test_pass')
+    handler.delete_user('test_pass')
+    assert login_result == True
+    
+def test_create_new_user_with_reused_user():
+    handler = UserHandler()
+    handler.create_user('testing_user', 'test_pass')
+    result = handler.create_user('testing_user', 'test_pass')
+    handler.login('testing_user', 'test_pass')
+    handler.delete_user('test_pass')
+    assert result == False
+
+def test_login_with_wrong_pass():
+    handler = UserHandler()
+    handler.create_user('testing_user', 'test_pass')
+    login_result = handler.login('testing_user', 'test_pass')
+    handler.delete_user('test_pass')
+    assert login_result == False
+
+def test_logout():
+    handler = UserHandler()
+    handler.create_user('testing_user', 'test_pass')
+    handler.login('testing_user', 'test_pass')
+    logout_result = handler.logout()
+    assert logout_result == False

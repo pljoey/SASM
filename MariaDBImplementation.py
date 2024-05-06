@@ -449,6 +449,7 @@ class MariaDBImplementation(DatabaseAbstract):
     def delete_user(self, username):
         user_id = self._get_user_id(username)
 
+
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
         with connection:
@@ -457,6 +458,14 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"DELETE FROM preferred_electives WHERE user_id = {user_id}")
             cur.execute(f"DELETE FROM previous_courses WHERE user_id = {user_id}")
             cur.execute(f"DELETE FROM blacklist WHERE user_id = {user_id}")
+            
+            cur.execute(f"SELECT schedule_id FROM schedule_name WHERE user_id = {user_id}")
+            schedule_ids = cur.fetchall()
+
+            for schedule_id in schedule_ids:
+                cur.execute(f"DELETE FROM schedule_contents WHERE schedule_id = {schedule_id[0]}")
+
+            cur.execute(f"DELETE FROM schedule_name WHERE user_id = {user_id}")
             cur.execute(f"DELETE FROM sasm_users WHERE user_id = {user_id}")
 
             connection.commit()
@@ -623,8 +632,10 @@ class MariaDBImplementation(DatabaseAbstract):
 
     def get_sections_from_schedule(self, username, schedule_name):
         user_id = self._get_user_id(username)
-        schedule_id = self._get_schedule_id(user_id, schedule_name)
-
+        try:
+            schedule_id = self._get_schedule_id(user_id, schedule_name)
+        except:
+            return "Incorrect schedule name"
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
         with connection:

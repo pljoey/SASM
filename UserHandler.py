@@ -152,6 +152,13 @@ class UserHandler:
             cur_course_split = cur_course.split(" ")
             self.database.add_section_to_schedule(self.aUser.get_user_name(), name, cur_course_split[0], cur_course_split[1])
 
+    def get_schedule_names(self):
+        print("Here are all schedules saved to your account:")
+        schedule_names = self.database.get_user_schedule_names(self.aUser.get_user_name())
+
+        for schedule_name in schedule_names:
+            print(schedule_name)
+
     def load_schedule(self, name):
         build_new_schedule = []
         sched = self.database.get_sections_from_schedule(self.aUser.get_user_name(), name)
@@ -174,7 +181,6 @@ class UserHandler:
         blacklisted = self.aUser.get_preferences().get_local_blacklist()
         result = []
         prev_courses = self.database.get_previous_courses(self.aUser.get_user_name())
-        print(prev_courses)
         classes_remaining = self.view_remaining_courses()
         for cur_class in classes_remaining:
             cur_class_split = cur_class.split(" ")
@@ -209,23 +215,25 @@ class UserHandler:
         #takes a string like 'IT 326'
         taken = self.database.get_previous_courses(self.aUser.get_user_name())
         c_Split = course.split()
-        dep = c_Split.pop(0)
-        num = c_Split.pop(0)
-        if self.database.check_for_course(dep,num) and course not in taken:
-            taken.append(course)
-            self.database.add_to_previous_courses(self.aUser.get_user_name(),dep,num)
-            return True
+        if(len(c_Split) == 2):
+            dep = c_Split.pop(0)
+            num = c_Split.pop(0)
+            if self.database.check_for_course(dep,num) and course not in taken:
+                taken.append(course)
+                self.database.add_to_previous_courses(self.aUser.get_user_name(),dep,num)
+                return True
         return False
 
     def remove_previous_course(self, course)->bool: 
         taken = self.database.get_previous_courses(self.aUser.get_user_name())
         c_Split = course.split()
-        dep = c_Split.pop(0)
-        num = c_Split.pop(0)
-        if self.database.check_for_course(dep,num) and course in taken:
-            taken.remove(course)
-            self.database.remove_from_previous_courses(self.aUser.get_user_name(),dep,num)
-            return True
+        if(len(c_Split) == 2):
+            dep = c_Split.pop(0)
+            num = c_Split.pop(0)
+            if self.database.check_for_course(dep,num) and course in taken:
+                taken.remove(course)
+                self.database.remove_from_previous_courses(self.aUser.get_user_name(),dep,num)
+                return True
         return False 
     
     def add_course_to_blacklist(self, course_id, course_dept):
