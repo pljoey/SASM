@@ -82,7 +82,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur = connection.cursor()
             cur.execute("USE SASM")
             cur.execute(f"SELECT schedule_id FROM schedule_name WHERE schedule_name = '{schedule_name}' AND user_id = {user_id}")
-            return cur.fetchone()
+            return cur.fetchone()[0]
 
     def get_user_pass(self, username):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
@@ -596,13 +596,15 @@ class MariaDBImplementation(DatabaseAbstract):
     def add_section_to_schedule(self, username, schedule_name, course_dept, course_num):
         user_id = self._get_user_id(username)
         schedule_id = self._get_schedule_id(user_id, schedule_name)
+        course_id = self._gen_course_id(course_dept, course_num)
+        section_id = self._gen_section_id(course_id, 1)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
-
+        print(schedule_id, type(schedule_id))
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"INSERT INTO schedule_contents (schedule_id) VALUES ({schedule_id})")
+            cur.execute(f"INSERT INTO schedule_contents (schedule_id, unique_section_id) VALUES ({schedule_id}, {section_id})")
             connection.commit()
 
     def remove_section_from_schedule(self, username, schedule_name, course_dept, course_num, section_num):
@@ -637,23 +639,18 @@ class MariaDBImplementation(DatabaseAbstract):
 
             course_section_list = []
 
-            try:
-                for section_id in section_ids:
-                    print(section_id)
-                    cur.execute(f"SELECT section_id FROM section WHERE unique_id = {section_id}")
-                    section_num = cur.fetchone()[0]
-                    
-                    cur.execute(f"SELECT course_id FROM section WHERE unique_id = {section_id}")
-                    course_id = cur.fetchone()[0]
+            for section_id in section_ids:
+                cur.execute(f"SELECT section_id FROM section WHERE unique_id = {section_id[0]}")
+                section_num = cur.fetchone()[0]
+                
+                cur.execute(f"SELECT course_id FROM section WHERE unique_id = {section_id[0]}")
+                course_id = cur.fetchone()[0]
 
-                    cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id}")
-                    course_names = cur.fetchone()
-                    final_course_name = course_names[0] + " " + str(course_names[1])
+                cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id}")
+                course_names = cur.fetchone()
+                final_course_name = course_names[0] + " " + str(course_names[1])
 
-                    course_section_list.append((final_course_name, section_num))
-            except:
-                print("An error has occured fetching saved schedule, make sure the name you put is valid. ")
-
+                course_section_list.append((final_course_name, section_num))
 
             return course_section_list
             
