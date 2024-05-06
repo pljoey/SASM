@@ -70,3 +70,9 @@ def test_remove_course_when_in_schedule():
     handler.aUser = User("test_guy",[], handler.aSched)
     result = handler.remove_course("IT", "168")
     assert result == True
+
+def test_add_course_to_blacklist_when_empty():
+    handler = UserHandler()
+    handler.aSched = handler.aSched = Schedule("test_sched", ["IT 168"])
+    handler.aUser = User("test_guy", [], handler.aSched)
+    handler.add_course_to_blacklist("IT", "168")
