@@ -157,7 +157,7 @@ class UserHandler:
         schedule_names = self.database.get_user_schedule_names(self.aUser.get_user_name())
 
         for schedule_name in schedule_names:
-            print(schedule_name)
+            print(schedule_name[0])
 
     def load_schedule(self, name):
         build_new_schedule = []

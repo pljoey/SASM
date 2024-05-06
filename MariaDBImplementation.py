@@ -600,7 +600,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur = connection.cursor()
             cur.execute("USE SASM")
             cur.execute(f"SELECT schedule_name FROM schedule_name WHERE user_id = {user_id}")
-            return cur.fetchone()
+            return cur.fetchall()
 
     def add_section_to_schedule(self, username, schedule_name, course_dept, course_num):
         user_id = self._get_user_id(username)
@@ -613,7 +613,7 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"INSERT INTO schedule_contents (schedule_id) VALUES ({schedule_id})")
+            cur.execute(f"INSERT INTO schedule_contents (schedule_id, unique_section_id) VALUES ({schedule_id}, {section_id})")
             connection.commit()
 
     def remove_section_from_schedule(self, username, schedule_name, course_dept, course_num, section_num):
