@@ -63,3 +63,10 @@ class UserController:
     
     def clear_schedule(self):
         self._handler.clear_schedule()
+
+    def is_blacklist_empty(self):
+        if self._handler.aUser.preferences.local_blacklist.blacklist.count < 0:
+            return False
+        return True
+
+        

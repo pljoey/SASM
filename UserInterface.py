@@ -349,7 +349,141 @@ class UserInterface:
         self.user_controller.load_schedule(name)
 
     def edit_prefences(self):
-        pass
+        back = False
+        while not back:
+            print("What would you like to edit?")
+            print("1. Credit Houres")
+            print("2. Prefered Electives")
+            print("3. Blacklist")
+            print("4. Back")
+            response = input()
+            match response:
+                case "1":
+                    pass
+                case "2":
+                    pass
+                case "3":
+                    self.edit_blacklist()
+                case "4":
+                    back = True
+                case _:
+                    print("not valid input \n")
+        
+
+    def edit_blacklist(self):
+        back = False
+        while not back:
+            print("Would you like to add or remove elements?")
+            print("1. Add Course to Blacklist")
+            print("2. Add Professor to Blacklist")
+            print("3. Remove Course from Blacklist")
+            print("4. Remove Professor from Blacklist")
+            print("5. Back")
+            response = input()
+            match response:
+                case "1":
+                    self.add_course_to_blacklist()
+                case "2":
+                    self.add_professor_to_blacklist()
+                case "3":
+                    self.remove_course_from_blacklist()
+                case "4":
+                    self.remove_professor_from_blacklist()
+                case "5":
+                    back = True
+                case _:
+                    print("not valid input \n")
+
+    def add_course_to_blacklist(self):
+        stop = False
+        while not stop:
+            print("Enter Course Department (Ex: IT, MAT, etc.)")
+            dept = input()
+            print("Enter ID Number (Ex: 180, 227, etc.)")
+            id = input()
+            self.user_controller._handler.add_course_to_blacklist(id, dept)
+            print("Add more?")
+            print("Y")
+            print("N")
+            response = input()
+            match response:
+                case "Y":
+                    stop = False
+                case "N":
+                    stop = True
+                case _:
+                    print("Invalid, breaking loop")
+                    stop = True
+
+    def add_professor_to_blacklist(self):
+        stop = False
+        while not stop:
+            print("Enter First Name")
+            first = input()
+            print("Enter Last Name")
+            last = input()
+            self.user_controller._handler.add_professor_to_blacklist(first, last)
+            print("Add more?")
+            print("Y")
+            print("N")
+            response = input()
+            match response:
+                case "Y":
+                    stop = False
+                case "N":
+                    stop = True
+                case _:
+                    print("Invalid, breaking loop")
+                    stop = True
+    
+    def remove_course_from_blacklist(self):
+        stop = False
+        while not stop:
+            if self.user_controller.is_blacklist_empty():
+                stop = True
+            else:
+                print("Enter Course Department (Ex: IT, MAT, etc.)")
+                dept = input()
+                print("Enter ID Number (Ex: 180, 227, etc.)")
+                id = input()
+                self.user_controller._handler.remove_course_to_blacklist(id, dept)
+                print("Remove more?")
+                print("Y")
+                print("N")
+                response = input()
+                match response:
+                    case "Y":
+                        stop = False
+                    case "N":
+                        stop = True
+                    case _:
+                        print("Invalid, breaking loop")
+                        stop = True
+
+    def remove_professor_from_blacklist(self):
+        stop = False
+        while not stop:
+            if self.user_controller.is_blacklist_empty():
+                stop = True
+            else:
+                print("Enter First Name")
+                first = input()
+                print("Enter Last Name")
+                last = input()
+                self.user_controller._handler.add_professor_to_blacklist(first, last)
+                print("Add more?")
+                print("Y")
+                print("N")
+                response = input()
+                match response:
+                    case "Y":
+                        stop = False
+                    case "N":
+                        stop = True
+                    case _:
+                        print("Invalid, breaking loop")
+                        stop = True
+        
 
     def export_to_format(self):
         self.user_controller.export_to_format()
