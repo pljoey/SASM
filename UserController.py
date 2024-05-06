@@ -57,3 +57,9 @@ class UserController:
     
     def save_schedule(self):
         self._handler.save_schedule_to_database()
+
+    def load_schedule(self, name):
+        self._handler.load_schedule(name)
+    
+    def clear_schedule(self):
+        self._handler.clear_schedule()

@@ -144,12 +144,24 @@ class UserHandler:
     def edit_schedule(self):
         pass
 
+    def clear_schedule(self):
+        self.aUser.set_current_schedule(None)
+
     def save_schedule_to_database(self):
-        cur_schedule = self.aUser.get_current_schedule()
+        cur_schedule = self.aUser.get_current_schedule().get_courses()
         name = self.database.create_schedule(self.aUser.get_user_name())
         for cur_course in cur_schedule:
+            print(cur_course)
             cur_course_split = cur_course.split(" ")
-            self.database.add_section_to_schedule(self.aUser.get_user_name(), name, cur_course_split[0], cur_course_split[1], cur_course_split[2])
+            self.database.add_section_to_schedule(self.aUser.get_user_name(), name, cur_course_split[0], cur_course_split[1])
+
+    def load_schedule(self, name):
+        build_new_schedule = []
+        sched = self.database.get_sections_from_schedule(self.aUser.get_user_name(), name)
+        for course in sched:
+            build_new_schedule.append(course[0])
+        print(build_new_schedule)
+        self.aUser.set_current_schedule(build_new_schedule) 
 
     def save_schedule_to_exportable_format(self):
         pass
@@ -177,10 +189,13 @@ class UserHandler:
         self.aUser.set_current_schedule(self.aSched)
 
     def view_schedule(self):
-        return self.aUser.get_current_schedule().get_courses()
+        try:
+            return self.aUser.get_current_schedule()
+        except:
+            return "No current schedule selected"
 
     def view_remaining_courses(self):
-        reqs = reqs = {"COM 223",  "ENG 249","IT 168","IT 179","IT 180","IT 191","IT 214","IT 225","IT 261","IT 279","IT 326", "IT 327","IT 328","IT 378","IT 383","IT 386","IT 398","MAT 145", "MAT 146","MAT 260"}
+        reqs = {"COM 223",  "ENG 249","IT 168","IT 179","IT 180","IT 191","IT 214","IT 225","IT 261","IT 279","IT 326", "IT 327","IT 328","IT 378","IT 383","IT 386","IT 398","MAT 145", "MAT 146","MAT 260"}
         prevCourses = self.database.get_previous_courses(self.aUser.get_user_name())
         result = []
         for x in reqs:
