@@ -24,13 +24,13 @@ class User:
     def set_courses_taken(self,courses):
         self.courses_taken = courses
 
-    def get_current_schedule(self)->Schedule.Schedule:
+    def get_current_schedule(self):
         return self.current_schedule
     
     def set_current_schedule(self,schedule):
         self.current_schedule = schedule
 
-    def get_preferences(self)->Preferences:
+    def get_preferences(self)->Preferences.Preferences:
         return self.preferences
     
     def set_preferences(self,preferences):

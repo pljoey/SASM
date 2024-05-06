@@ -1,23 +1,11 @@
 import Course
-import ExportableFormatFactory
-import Preferences
-import Schedule
 from DatabaseManagementFactory import DatabaseManagementFactory
-import hashlib
 import random
 
 class CourseHandler:
     #method for the user to manually create a course 
     def __init__(self):
        self.database = DatabaseManagementFactory.get_database_instance('mariadb')
-
-
-    def create_course(course_name, course_time, section):
-        pass
-
-    #
-    def get_course_section_review(section):
-        return
     
     def add_custom_course(self,name,start_time,end_time,days)->bool:
         id = random.randrange(start = 100, stop = 999)
@@ -54,26 +42,34 @@ class CourseHandler:
         start_time_float = 0.0
         cur_num = ""
         for char in start_time:
-            if(char.isnumeric):
+            print(char)
+            print(cur_num)
+            if(char.isnumeric()):
+                print("Number")
                 cur_num += char
             elif char == ':':
-                start_time_float += int(cur_num)
+                start_time_float += float(cur_num)
                 cur_num = ""
             elif char == ' ':
-                start_time_float += (int(cur_num)/100)
+                start_time_float += (float(cur_num)/100)
             elif char == 'p':
                 start_time_float += 12
             elif char != 'a':
                 print("invalid start time format. Unable to make custom course")
                 return False
+        print(start_time_float)
         
         #converting end time to readable format
         end_time_float = 0.0
         cur_num = ""
         for char in end_time:
-            if(char.isnumeric):
+            print(char)
+            print(cur_num)
+            if(char.isnumeric()):
+                print("number")
                 cur_num += char
             elif char == ':':
+                print(int(cur_num))
                 end_time_float += int(cur_num)
                 cur_num = ""
             elif char == ' ':
@@ -83,9 +79,22 @@ class CourseHandler:
             elif char != 'a':
                 print("invalid start time format. Unable to make custom course")
                 return False
+        print(end_time_float)
 
         custom.add_section(1, None, start_time_float, end_time_float, day_list[0],day_list[1],day_list[2],day_list[3],day_list[4])
-        self.database.add_course(department, id, name)
+        self.database.add_course(department, id, 'Custom Course', name, 0)
         self.database.add_section(1, "Custom", "Course", "CUS", "CUS", id, start_time_float, end_time_float, day_list[0],day_list[1],day_list[2],day_list[3],day_list[4])
+        print("Your course is CUS " + str(id))
         return True
-    
+
+    def get_course_info(self, course):
+        c_Split = course.split()
+        dep = c_Split.pop(0)
+        num = c_Split.pop(0)
+        return self.database.get_course_description(dep,num)
+
+    def get_course_hours(self,course):
+        c_Split = course.split()
+        dep = c_Split.pop(0)
+        num = c_Split.pop(0)
+        return self.database.get_course_credit_hours(dep,num)

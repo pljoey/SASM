@@ -116,15 +116,6 @@ class MariaDBImplementation(DatabaseAbstract):
             username_db = cur.fetchone()
             return username_db != None
         
-    def update_password(self, username, password):
-        connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
-
-        with connection:
-            cur = connection.cursor()
-            cur.execute("USE SASM")
-            cur.execute(f"UPDATE sasm_users SET password = " + password + "WHERE username = " + username)
-            connection.commit()
-        
     def create_user(self, username, hash_password):
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
 
@@ -550,6 +541,7 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"INSERT INTO schedule_name (user_id, schedule_name, schedule_id) VALUES ({user_id}, '{schedule_name}', {schedule_id})")
 
             connection.commit()
+        return schedule_name
 
     
     def edit_schedule_name(self, username, old_name, new_name):
@@ -601,14 +593,14 @@ class MariaDBImplementation(DatabaseAbstract):
             cur.execute(f"SELECT schedule_name FROM schedule_name WHERE user_id = {user_id}")
             return cur.fetchone()
 
-    def add_section_to_schedule(self, username, schedule_name, course_dept, course_num, section_num):
+    def add_section_to_schedule(self, username, schedule_name, course_dept, course_num):
         user_id = self._get_user_id(username)
         schedule_id = self._get_schedule_id(user_id, schedule_name)
         course_id = self._gen_course_id(course_dept, course_num)
-        section_id = self._gen_section_id(course_id, section_num)
+        section_id = self._gen_section_id(course_id, 1)
 
         connection = pymysql.connect(host=self.HOST, user=self.USER, password=self.PASSWORD, db=self.DATABASE)
-
+        print(schedule_id, type(schedule_id))
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
@@ -648,15 +640,15 @@ class MariaDBImplementation(DatabaseAbstract):
             course_section_list = []
 
             for section_id in section_ids:
-                cur.execute(f"SELECT section_id FROM section WHERE unique_id = {section_id}")
+                cur.execute(f"SELECT section_id FROM section WHERE unique_id = {section_id[0]}")
                 section_num = cur.fetchone()[0]
                 
-                cur.execute(f"SELECT course_id FROM section WHERE unique_id = {section_id}")
+                cur.execute(f"SELECT course_id FROM section WHERE unique_id = {section_id[0]}")
                 course_id = cur.fetchone()[0]
 
                 cur.execute(f"SELECT department, course_num FROM course WHERE course_id = {course_id}")
                 course_names = cur.fetchone()
-                final_course_name = course_names[0] + " " + str(course_names(1))
+                final_course_name = course_names[0] + " " + str(course_names[1])
 
                 course_section_list.append((final_course_name, section_num))
 

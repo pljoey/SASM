@@ -1,5 +1,6 @@
 import CourseController
 import UserController
+import ratemyprofessor
 
 class UserInterface:
     def __init__(self):
@@ -59,6 +60,7 @@ class UserInterface:
         while not user_created:
             print("Please enter a username:")
             username = input()
+
             print("Please enter a password:")
             password = input()
 
@@ -69,6 +71,9 @@ class UserInterface:
 
         print('User Created \n')
 
+    def forgot_password(self, username):
+        password = input("What is your new password? ")
+        self.user_controller.update_password(username, password)
 
     def login(self):
         logged_in = False
@@ -82,8 +87,10 @@ class UserInterface:
             logged_in = self.user_controller.login(username, password)
 
             if not logged_in:
-                print("Incorrect username or password please try again. \n") 
-
+                print("Incorrect username or password, press 1) to try again or 2) forgot password \n") 
+                choice = input()
+                if (choice == "2"):
+                    self.forgot_password(username)
         
         self.basic_menu()
 
@@ -102,12 +109,18 @@ class UserInterface:
         else:
             print('Account not deleted')
 
+    def fill_schedule(self):
+        self.user_controller.fill_schedule()
+
+    def view_schedule(self):
+        self.user_controller.view_schedule()
+
     def create_schedule_menu(self):
         success = self.user_controller.create_schedule()
         if success == True:
-            print("Schedule successfully created")
+            self.fill_schedule()
         else:
-            print("Schedule already exists")
+            print("Schedule currently in use, please save or delete the schedule to create a new one")
 
     def view_schedule_menu(self):
         back = False
@@ -115,23 +128,35 @@ class UserInterface:
             print("do you want to view or edit a schedule?")
             print("1. View schedule")
             print("2. Edit schedule")
-            print("3. Export Schedule to Text file")
-            print("4. create custom course")
-            print("5. Back")
+            print("3. Clear current schedule")
+            print("4. Save Schedule")
+            print("5. Load Schedule")
+            print("6. Export Schedule to Text file")
+            print("7. create custom course")
+            print("8. Back")
             response = input()
             match response:
                     case "1":
-                        print("viewing schedule")
+                        self.view_schedule()
                     case "2":
                         self.schedule_edit_menu()
                     case "3":
-                        self.export_to_format()
+                        self.clear_schedule()
                     case "4":
-                        self.create_custom_course_menu()
+                        self.save_schedule_to_account()
                     case "5":
+                        self.load_schedule()
+                    case "6":
+                        self.export_to_format()
+                    case "7":
+                        self.create_custom_course_menu()
+                    case "8":
                         self.basic_menu()
                     case _:
                         print("not a valid input \n")
+
+    def clear_schedule(self):
+        self.user_controller.clear_schedule()
         
     def schedule_edit_menu(self):
         back = False
@@ -146,7 +171,7 @@ class UserInterface:
                     case "1":
                         self.add_course_menu()
                     case "2":
-                        self.user_controller.remove_course()
+                        self.remove_course_menu()
                     case "3":
                         if self.user_controller.delete_schedule():
                             print("Schedule successfully deleted")
@@ -169,68 +194,123 @@ class UserInterface:
             response = input()
             match response:
                 case "1":
-                    self.search_for_course()
+                    self.view_course_information()
                 case "2":
                     self.search_for_professor()
                 case "3":
-                    print("Here are the remaining core courses for your major: ")
-                    list = self.user_controller.view_remaining_courses()
-                    y = 0
-                    for x in list:
-                        print(x," ", end='')
-                        y = y + 1
-                        if y == 3:
-                            print()
-                            y = 0                
+                    self.view_remaining_courses()             
                 case "4":
                     self.basic_menu()
                     back = True
                 case _:
                     print("not a valid input \n")
 
+    def view_remaining_courses(self):
+        print("Here are the remaining core courses for your major: ")
+        list = self.user_controller.view_remaining_courses()
+        y = 0
+        for x in list:
+            print(x," ", end='')
+            y = y + 1
+            if y == 3:
+                print()
+                y = 0   
+
+    def view_prior_courses(self):
+        print("Your prior courses: ")
+        list = self.user_controller.view_prior_courses()
+        y = 0
+        for x in list:
+            print(x," ", end='')
+            y = y + 1
+            if y == 3:
+                print()
+                y = 0   
+        print()
+
     def account_menu(self):
         back = False
         while not back:
-            print("menu for viewing account")
-            print("1. Edit Preferences")
-            response = input()
-            match response:
-                case "1":
-                    self.edit_prefences()
-                    
-
-            print("do you want to view course or professor information?")
+            print("Do you want to view course or professor information?")
             print("1. View account information")
-            print("2. edit prior courses")
-            print("3. edit preferences")
-            print("4. Delete Account")
-            print("5. back")
+            print("2. View prior courses")
+            print("3. edit prior courses")
+            print("4. edit preferences")
+            print("5. Delete Account")
+            print("6. Change Password")
+            print("7. back")
             response = input()
             match response:
                 case "1":
                     self.view_account()
                 case "2":
-                    self.course_controller.edit_prior_courses()
+                    self.view_prior_courses()
                 case "3":
-                    self.course_controller.edit_preferences()
+                    self.edit_prior_courses()
                 case "4":
+                    self.course_controller.edit_preferences()
+                case "5":
                     #TODO: Fix going between start_menu and basic_menu
                     self.delete_user()
-                case "5":
+                case "6":
+                    self.forgot_password()
+                case "7":
                     self.basic_menu()
                     back = True
                 case _:
                     print("not a valid input \n")
 
+    def edit_prior_courses(self):
+        print("1. Add prior courses")
+        print("2. Remove prior courses")
+        print("3. Back")
+        response = input()
+        match response:
+            case "1":
+                            cont = "y"
+                            while cont ==  "y":
+                                print("Enter the name of a course: ")
+                                course = input()
+                                worked = self.user_controller.add_previous_courses(course)
+                                if worked:
+                                    print("Course added, add more (y/n): ")
+                                    cont = input()
+                                else:
+                                    print("Course not added, try more (y/n): ")
+                                    cont = input()
+            case "2":
+                            cont = "y"
+                            while cont ==  "y":
+                                print("Enter the name of a course: ")
+                                course = input()
+                                worked = self.user_controller.remove_previous_course(course)
+                                if worked:
+                                    print("Course removed, remove more (y/n): ")
+                                    cont = input()
+                                else:
+                                    print("Course not removed, remove more (y/n): ")
+                                    cont = input()
+            case "3":
+                            self.basic_menu()
+                            back = True
+            case _:
+                            print("not a valid input \n")
+
     def search_for_professor(self):
         print("please enter a professor's last name:")
         response = input()
         valid_prof = self.course_controller.get_professor_info(response)
+        if(valid_prof):
+            print(response)
+            print("Overall rating: " + str(ratemyprofessor.get_professor_by_school_and_name(ratemyprofessor.get_school_by_name("Illinois State University"), response).rating))
+            print("Difficulty rating: " + str(ratemyprofessor.get_professor_by_school_and_name(ratemyprofessor.get_school_by_name("Illinois State University"), response).difficulty))
+            print("Would take again: " + str(ratemyprofessor.get_professor_by_school_and_name(ratemyprofessor.get_school_by_name("Illinois State University"), response).would_take_again) + "%")
 
-    def search_for_course(self):
-        print("please enter a course's id:")
+    def view_course_information(self):
+        print("Please enter a course name: ")
         response = input()
-        valid_course = self.course_controller.get_course_info(response)
+        print("Hours: ", self.course_controller.get_course_hours(response))
+        print(self.course_controller.get_course_info(response))
 
     def add_course_menu(self):
         print("please enter a course's department:")
@@ -238,6 +318,13 @@ class UserInterface:
         print("please enter a course's id number:")
         id = input()
         print(self.user_controller.add_course(dept, id))
+
+    def remove_course_menu(self):
+        print("please enter a course's department:")
+        dept = input()
+        print("please enter a course's id number:")
+        id = input()
+        print(self.user_controller.remove_course(dept, id))
 
     def create_custom_course_menu(self):
         print("please enter a name for the course")
@@ -251,11 +338,15 @@ class UserInterface:
         days = input()
         self.course_controller.add_custom_course(name,start_time,end_time,days)
 
-    def get_course_review(self):
-        pass
+    def get_course_hours(self,course):
+        return self.course_controller.get_course_hours(course)
 
     def save_schedule_to_account(self):
-        pass
+        self.user_controller.save_schedule()
+
+    def load_schedule(self):
+        name = input("What schedule would you like to load? ")
+        self.user_controller.load_schedule(name)
 
     def edit_prefences(self):
         back = False
