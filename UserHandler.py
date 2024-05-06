@@ -147,8 +147,8 @@ class UserHandler:
     def save_schedule_to_database(self):
         cur_schedule = self.aUser.get_current_schedule().get_courses()
         name = self.database.create_schedule(self.aUser.get_user_name())
+        print("saved as", name)
         for cur_course in cur_schedule:
-            print(cur_course)
             cur_course_split = cur_course.split(" ")
             self.database.add_section_to_schedule(self.aUser.get_user_name(), name, cur_course_split[0], cur_course_split[1])
 
