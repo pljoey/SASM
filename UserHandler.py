@@ -152,6 +152,13 @@ class UserHandler:
             cur_course_split = cur_course.split(" ")
             self.database.add_section_to_schedule(self.aUser.get_user_name(), name, cur_course_split[0], cur_course_split[1])
 
+    def get_schedule_names(self):
+        print("Here are all schedules saved to your account:")
+        schedule_names = self.database.get_user_schedule_names(self.aUser.get_user_name())
+
+        for schedule_name in schedule_names:
+            print(schedule_name)
+
     def load_schedule(self, name):
         build_new_schedule = []
         sched = self.database.get_sections_from_schedule(self.aUser.get_user_name(), name)

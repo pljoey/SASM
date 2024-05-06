@@ -66,3 +66,6 @@ class UserController:
     
     def view_blacklist(self):
         return self._handler.view_blacklist()
+    
+    def get_schedule_names(self):
+        self._handler.get_schedule_names()
