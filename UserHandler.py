@@ -174,7 +174,6 @@ class UserHandler:
         blacklisted = self.aUser.get_preferences().get_local_blacklist()
         result = []
         prev_courses = self.database.get_previous_courses(self.aUser.get_user_name())
-        print(prev_courses)
         classes_remaining = self.view_remaining_courses()
         for cur_class in classes_remaining:
             cur_class_split = cur_class.split(" ")

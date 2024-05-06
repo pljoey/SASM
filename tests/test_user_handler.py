@@ -5,8 +5,9 @@ from Schedule import Schedule
 
 def test_view_schedule():
     handler = UserHandler()
+    handler.aSched = Schedule("test_sched",["IT 168"])
     handler.aUser = User("test")
-    handler.aUser.set_current_schedule(["IT 168"])
+    handler.aUser.set_current_schedule(handler.aSched)
     assert handler.view_schedule() == ["IT 168"]
     
 def test_create_schedule_for_user_with_schedule():
