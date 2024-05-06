@@ -5,27 +5,27 @@ import Course
 class Blacklist:
     #constructor for blacklist class
     def __init__(self):
-        self.blacklist = []
+        self.bl = []
 
     #returns the blacklist
     def get_blacklist(self)->list:
-        return self.blacklist
+        return self.bl
     
     def set_blacklist(self, blacklist):
-        self.blacklist = blacklist
+        self.bl = blacklist
 
     def add_to_course_to_blacklist(self, id, dept):
         name = dept, " ", id 
-        self.blacklist.append(name.upper())
+        self.bl.append(name)
 
     def add_professor_to_blacklist(self, first, last):
         name = first, " ", last
-        self.blacklist.append(name.upper())
+        self.bl.append(name)
 
     def remove_course_from_blacklist(self, id, dept):
         name = dept, " ", id
-        self.blacklist.remove(name.upper())
+        self.bl.remove(name)
 
     def remove_professor_from_blacklist(self, first, last):
         name = first, " ", last
-        self.blacklist.remove(name.upper())
+        self.bl.remove(name)
