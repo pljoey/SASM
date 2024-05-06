@@ -1,23 +1,11 @@
 import Course
-import ExportableFormatFactory
-import Preferences
-import Schedule
 from DatabaseManagementFactory import DatabaseManagementFactory
-import hashlib
 import random
 
 class CourseHandler:
     #method for the user to manually create a course 
     def __init__(self):
        self.database = DatabaseManagementFactory.get_database_instance('mariadb')
-
-
-    def create_course(course_name, course_time, section):
-        pass
-
-    #
-    def get_course_section_review(section):
-        return
     
     def add_custom_course(self,name,start_time,end_time,days)->bool:
         id = random.randrange(start = 100, stop = 999)
@@ -99,3 +87,14 @@ class CourseHandler:
         print("Your course is CUS " + str(id))
         return True
 
+    def get_course_info(self, course):
+        c_Split = course.split()
+        dep = c_Split.pop(0)
+        num = c_Split.pop(0)
+        return self.database.get_course_description(dep,num)
+
+    def get_course_hours(self,course):
+        c_Split = course.split()
+        dep = c_Split.pop(0)
+        num = c_Split.pop(0)
+        return self.database.get_course_credit_hours(dep,num)

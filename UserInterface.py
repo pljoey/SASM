@@ -194,7 +194,7 @@ class UserInterface:
             response = input()
             match response:
                 case "1":
-                    self.search_for_course()
+                    self.view_course_information()
                 case "2":
                     self.search_for_professor()
                 case "3":
@@ -306,10 +306,11 @@ class UserInterface:
             print("Difficulty rating: " + str(ratemyprofessor.get_professor_by_school_and_name(ratemyprofessor.get_school_by_name("Illinois State University"), response).difficulty))
             print("Would take again: " + str(ratemyprofessor.get_professor_by_school_and_name(ratemyprofessor.get_school_by_name("Illinois State University"), response).would_take_again) + "%")
 
-    def search_for_course(self):
-        print("please enter a course's id:")
+    def view_course_information(self):
+        print("Please enter a course name: ")
         response = input()
-        valid_course = self.course_controller.get_course_info(response)
+        print("Hours: ", self.course_controller.get_course_hours(response))
+        print(self.course_controller.get_course_info(response))
 
     def add_course_menu(self):
         print("please enter a course's department:")
@@ -337,8 +338,8 @@ class UserInterface:
         days = input()
         self.course_controller.add_custom_course(name,start_time,end_time,days)
 
-    def get_course_review(self):
-        pass
+    def get_course_hours(self,course):
+        return self.course_controller.get_course_hours(course)
 
     def save_schedule_to_account(self):
         self.user_controller.save_schedule()
