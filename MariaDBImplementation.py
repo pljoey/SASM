@@ -604,7 +604,7 @@ class MariaDBImplementation(DatabaseAbstract):
         with connection:
             cur = connection.cursor()
             cur.execute("USE SASM")
-            cur.execute(f"INSERT INTO schedule_contents (schedule_id, unique_section_id) VALUES ({schedule_id}, {section_id})")
+            cur.execute(f"INSERT INTO schedule_contents (schedule_id) VALUES ({schedule_id})")
             connection.commit()
 
     def remove_section_from_schedule(self, username, schedule_name, course_dept, course_num, section_num):
