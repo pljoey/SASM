@@ -43,12 +43,6 @@ class UserHandler:
 
             self.aUser.preferences.set_preferred_credit_hours(preferred_credit_hours)
 
-            for professor in prof_blacklist:
-                self.aUser.preferences.add_To_Blacklist(professor=professor)
-            
-            for course in course_blacklist:
-                self.aUser.preferences.add_To_Blacklist(course=course)
-
             return True
 
         return False
@@ -121,7 +115,9 @@ class UserHandler:
                             
 
     def remove_course(self, course_dept, course_id)->bool: 
-        if (course_dept + " " + course_id) in self.aSched.get_courses():
+        if(self.aSched == None):
+            return False
+        elif (course_dept + " " + course_id) in self.aSched.get_courses():
             self.aSched.get_courses().remove(course_dept + " " + course_id)
             self.aUser.set_current_schedule(self.aSched)
             return True
@@ -230,17 +226,16 @@ class UserHandler:
         return False 
     
     def add_course_to_blacklist(self, course_id, course_dept):
-        self.aUser.preferences.local_blacklist.add_to_course_to_blacklist(course_id, course_dept)
-        self.database.add_course_to_blacklist(self.aUser.get_user_name(), course_id, course_dept)
+        self.database.add_course_to_blacklist(self.aUser.get_user_name(), course_dept,course_id)
     
     def add_professor_to_blacklist(self, professor_first, professor_last, professor_dept):
-        self.aUser.preferences.local_blacklist.add_professor_to_blacklist(professor_first, professor_last)
         self.database.add_professor_to_blacklist(self.aUser.get_user_name(), professor_first, professor_last, professor_dept)
     
     def remove_course_from_blacklist(self, course_id, course_dept):
-        self.aUser.preferences.local_blacklist.remove_course_from_blacklist(course_id, course_dept)
-        self.database.remove_course_from_blacklist(self.aUser.get_user_name(), course_id, course_dept)
+        self.database.remove_course_from_blacklist(self.aUser.get_user_name(),course_dept, course_id )
 
     def remove_professor_from_blacklist(self, professor_first, professor_last, professor_dept):
-        self.aUser.preferences.local_blacklist.remove_professor_from_blacklist(professor_first, professor_last)
         self.database.remove_professor_from_blacklist(self.aUser.get_user_name(), professor_first, professor_last, professor_dept)
+
+    def view_blacklist(self):
+        return self.database.get_blacklist(self.aUser.get_user_name())
